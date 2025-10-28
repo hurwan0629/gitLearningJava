@@ -4,15 +4,13 @@ public class MemberDTO {
 	private String memberId;
 	private String memberPasswd;
 	private String memberName;
-	private String memberCondition;
-	private String memberRole;
 	
-	
-	public String getMemberCondition() {
-		return memberCondition;
+	private String condition;
+	public String getCondition() {
+		return condition;
 	}
-	public void setMemberCondition(String memberCondition) {
-		this.memberCondition = memberCondition;
+	public void setCondition(String condition) {
+		this.condition = condition;
 	}
 	public String getMemberId() {
 		return memberId;

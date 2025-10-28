@@ -37,6 +37,7 @@ public class Controller {
 	}
 	
 	public void startApp() {
+		int PK = 1003;
 		while(true) {
 			
 			// 비로그인 상태면
@@ -46,7 +47,15 @@ public class Controller {
 			}
 			// 로그인 상태면
 			else {
-				this.common.printLoginMenu(userInfo);
+				
+				// 관리자가 로그인 했을때
+				if(userInfo.getMemberId().equals("admin")) {
+					// 관리자모드
+					admin.printLoginMenu(userInfo);
+				}
+				else {
+					this.common.printLoginMenu(userInfo);
+				}
 			}
 			
 			
@@ -289,6 +298,71 @@ public class Controller {
 				else {
 					this.common.func02();
 				}
+			}
+			// 상품 추가
+			else if (command == 9) {
+				// 관리자로부터 상품이름, 가격, 재곡를 받아오기
+				String name = admin.getProductName();
+				int price = admin.getProductPrice();
+				int count = admin.getCount();
+				
+				// DB에 정보 넘겨서 저장시키기;
+				ProductDTO productDTO = new ProductDTO();
+				productDTO.setProductId(Integer.toString(PK++));
+				productDTO.setProductName(name);
+				productDTO.setProductPrice(price);
+				productDTO.setProductCount(count);
+				
+				boolean flag = pDAO.insert(productDTO); 
+						
+				
+				//
+				if(flag) {
+					common.func01();
+				}
+				else {
+					common.func02();
+				}
+			}
+			// 상품삭제
+			else if(command == 10) {
+				ProductDTO productDTO = new ProductDTO();
+				productDTO.setProductCondition("ALL");
+				ArrayList<ProductDTO> datas = pDAO.selectAll(productDTO);
+				String num = client.getProductNum(datas);
+				
+				productDTO = new ProductDTO();
+				productDTO.setProductId(num);
+				boolean flag = pDAO.delete(productDTO);
+				
+				if(flag) {
+					common.func01();
+				}
+				else {
+					common.func02();
+				}
+			}
+			// 상품 재고 추가
+			else if(command == 11) {
+				// 누구를 몇개 추가할지 입력받기
+				ProductDTO productDTO = new ProductDTO();
+				productDTO.setProductCondition("ALL");
+				ArrayList<ProductDTO> datas = pDAO.selectAll(productDTO);
+				String num = client.getProductNum(datas);
+				int count = admin.getCount();
+				
+				productDTO = new ProductDTO();
+				productDTO.setProductCondition("ADD");
+				productDTO.setProductId(num);
+				productDTO.setProductCount(count);
+				boolean flag = pDAO.update(productDTO);
+				if(flag) {
+					common.func01();
+				}
+				else{
+					common.func02();
+				}
+				
 			}
 		}
 	}

@@ -10,12 +10,18 @@ public class MemberDAO {
 	public MemberDAO() {
 		this.datas = new ArrayList<>();
 
-		MemberDTO sample = new MemberDTO();
-		sample.setMemberId("admin");
-		sample.setMemberPasswd("1234");
-		sample.setMemberName("admin");
+		MemberDTO sample01 = new MemberDTO();
+		sample01.setMemberId("admin");
+		sample01.setMemberPasswd("1234");
+		sample01.setMemberName("관리자");
 
-		datas.add(sample);
+		MemberDTO sample02 = new MemberDTO();
+		sample02.setMemberId("test");
+		sample02.setMemberPasswd("1234");
+		sample02.setMemberName("테스트");
+
+		datas.add(sample01);
+		datas.add(sample02);
 	}
 
 	private ArrayList<MemberDTO> selectAll(MemberDTO memberDTO) { // 코드의 결합도가 낮아짐 ★
