@@ -144,7 +144,7 @@ public class Controller {
 			// 회원탈퇴
 			else if (command == 3) {
 				while(true)
-					
+
 				client.getMemberPw(this.userInfo);
 			}
 			// 로그아웃
