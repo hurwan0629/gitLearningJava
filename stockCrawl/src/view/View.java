@@ -47,11 +47,10 @@ public class View {
 				System.out.println("올바른 번호를 입력해주세요!");
 				continue;
 			}
-			if (command > 5 || command < 0) {
-				System.out.println("올바른 입력을 해주세요!");
-				continue;
+			if (0 <= command && command < 6) {
+				break;
 			}
-			break;
+			System.out.println("올바른 입력을 해주세요!");
 		}
 		return command;
 	}
@@ -94,11 +93,10 @@ public class View {
 				System.out.println("올바른 가격을 입력해주세요!");
 				continue;
 			}
-			if (price <= 0) {
-				System.out.println("올바른 가격을 입력해주세요!");
-				continue;
+			if (0 < price) {
+				break;
 			}
-			break;
+			System.out.println("올바른 가격을 입력해주세요!");
 		}
 
 		StockDTO stockDTO = new StockDTO();
@@ -113,7 +111,7 @@ public class View {
 			System.out.println((i + 1) + ". " + datas.get(i).getName());
 		}
 		while (true) {
-			System.out.println("번호를 입력하세요.");
+			System.out.print("번호를 입력하세요. >>> ");
 			try {
 				command = sc.nextInt();
 				sc.nextLine();
@@ -123,13 +121,12 @@ public class View {
 				System.out.println("올바른 번호를 입력해주세요!");
 				continue;
 			}
-			if (command <= 0 || command > datas.size()) {
-				System.out.println("올바른 입력을 해주세요!");
-				continue;
+			if (0 < command  && command <= datas.size()) {
+				break;
 			}
-			break;
+			System.out.println("올바른 입력을 해주세요!");
 		}
-		stockDTO.setName(datas.get(command-1).getName());
+		stockDTO.setId(datas.get(command-1).getId());
 		return stockDTO;
 	}
 }

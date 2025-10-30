@@ -81,9 +81,9 @@ public class Controller {
 				StockDTO stockDTO = new StockDTO();
 						
 				// 전체 출력하기
-				this.view.printAllStock(this.model.selectAll(stockDTO));
+//				this.view.printAllStock(this.model.selectAll(stockDTO));
 				
-				// 이름 넣은 DTO 받기
+				// 아이디 넣은 DTO 받기
 				stockDTO = this.view.getStockNameFromList(this.model.selectAll(stockDTO));
 				
 				// 삭제에 실패했다면
@@ -101,7 +101,7 @@ public class Controller {
 				StockDTO stockDTO = new StockDTO();
 						
 				// 전체 출력하기
-				this.view.printAllStock(this.model.selectAll(stockDTO));
+//				this.view.printAllStock(this.model.selectAll(stockDTO));
 				
 				// 이름 넣은 DTO 받기
 				stockDTO = this.view.getStockNameFromList(this.model.selectAll(stockDTO));
@@ -109,7 +109,9 @@ public class Controller {
 				// 동일한 이름의 종목이 존재하지 않는다면
 				if(this.model.selectOne(stockDTO)==null) {
 					this.view.printFail();
+					continue;
 				}
+				
 				// 동일한 이름의 종목이 존재한다면
 				StockDTO priceStockDTO = this.view.getStockPrice();
 				stockDTO.setPrice(priceStockDTO.getPrice());

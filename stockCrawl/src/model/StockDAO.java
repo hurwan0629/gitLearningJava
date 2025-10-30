@@ -22,7 +22,7 @@ public class StockDAO {
 
 	public StockDTO selectOne(StockDTO stock){
 		for(StockDTO dto : this.datas){
-			if(dto.getName().equals(stock.getName())){
+			if(dto.getId()==stock.getId()){
 				return dto;
 			}
 		}
@@ -45,7 +45,8 @@ public class StockDAO {
 
 	public boolean update(StockDTO stock){
 		for(int i = 0; i < this.datas.size(); i++){
-			if(this.datas.get(i).getName().equals(stock.getName())){
+			// id 가 같으면 가격 바꿔주기
+			if(this.datas.get(i).getId()==stock.getId()){
 				this.datas.get(i).setPrice(stock.getPrice());
 				return true;
 			}
@@ -55,7 +56,7 @@ public class StockDAO {
 
 	public boolean delete(StockDTO stock){
 		for(int i = 0; i < this.datas.size(); i++){
-			if(this.datas.get(i).getName().equals(stock.getName())){
+			if(this.datas.get(i).getId()==stock.getId()){
 				this.datas.remove(i);
 				return true;
 			}

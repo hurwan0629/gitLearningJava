@@ -1,1 +1,14 @@
 /.metadata/
+# 빌드 결과물
+/bin/
+/out/
+/target/
+
+# IDE 설정
+/.idea/
+/.vscode/
+/.settings/
+
+# OS 캐시파일
+.DS_Store
+Thumbs.db
