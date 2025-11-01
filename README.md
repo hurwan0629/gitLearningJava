@@ -22,3 +22,6 @@ Test00 <- 교시속 몇번쨰 개념설명인지
 
 **day17** : MVC 쇼핑몰 홈페이지 제작 수업 2일차 -> DTO 2개 활용, View 3개로 쪼개기 "`https://www.notion.so/272117a41d4d8043bf33e7c6345a945a?v=272117a41d4d80b7b6bb000c9ce206c0&p=29a117a41d4d801ab05ec20d92e4b898&pm=s"
 
+**주말 개인 공부 dbms, jdbc 학생 crrud 제작**
+**aa48d79**
+[제작 파일](https://drive.google.com/drive/folders/1RFxeKk9_Sb9UoAOm8J3We4Ma1kz0KC1P?usp=drive_link)
