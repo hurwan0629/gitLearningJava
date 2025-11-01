@@ -1,0 +1,31 @@
+SELECT TABLE_NAME FROM USER_TABLES;
+
+-- 테이블 존재하지 않음
+
+CREATE TABLE STUDENT(
+	STUDENT_ID INTEGER PRIMARY KEY,
+	NAME VARCHAR(30) NOT NULL,
+	AGE NUMBER(10),
+	SCORE NUMBER(3) DEFAULT 0
+);
+
+-- STUDENT 테이블 만들기
+-- STUDENT 테이블 ID를 자동으로 늘리게 만들기 
+-- 아 STUDENT_앞에 붙여서 컬럼명 짜는거 까먹었다
+
+-- 시퀀스 만들기
+-- 자동으로 올라가는 변수같은거?
+CREATE SEQUENCE STUDENT_ID_SEQ
+START WITH 1
+INCREMENT BY 1
+NOCACHE;
+
+-- 아 CDB$ROOT 에서 설정해야했구나
+-- 근데 12버전은 그냥 설정하면 되니까 걱정 ㄴㄴ
+INSERT INTO STUDENT VALUES(STUDENT_ID_SEQ.NEXTVAL, '허완', 21, 95);
+
+-- 이제 확인한번 해보죠
+SELECT * FROM STUDENT;
+
+INSERT INTO STUDENT VALUES(STUDENT_ID_SEQ.NEXTVAL, '홍길동', 22, 80);
+-- 이제 자동화 프로그램 만들러 가보자잉
