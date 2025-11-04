@@ -7,7 +7,16 @@ public class BoardDTO {
 	private String mid; // FK : 상대 테이블의 PK
 	private int bcount;
 	
-	private String condition;
+	private String writer;
+	
+	private String condition;	
+	
+	public String getWriter() {
+		return writer;
+	}
+	public void setWriter(String writer) {
+		this.writer = writer;
+	}
 	public String getCondition() {
 		return condition;
 	}

@@ -10,10 +10,21 @@ import model.common.JDBCUtil;
 import model.dto.BoardDTO;
 
 public class BoardDAO {
-	private static final String SELECT_ALL = "SELECT * FROM BOARD ORDER BY BID DESC";
-	private static final String SELECT_ALL_TITLE = "SELECT * FROM BOARD WHERE TITLE LIKE ? ORDER BY BID DESC";
-	private static final String SELECT_ALL_MID = "SELECT * FROM BOARD WHERE MID = ? ORDER BY BID DESC";
-	private static final String SELECT_ALL_BCOUNT = "SELECT * FROM BOARD ORDER BY BCOUNT DESC, BID DESC";
+	private static final String SELECT_ALL = //"SELECT * FROM BOARD ORDER BY BID DESC"; 
+			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT, M.NAME, NAME "
+			+ "FROM BOARD B LEFT OUTER JOIN MEMBER M ON M.MID = B.MID ORDER BY B.BID DESC";
+	private static final String SELECT_ALL_TITLE = //"SELECT * FROM BOARD WHERE TITLE LIKE ? ORDER BY BID DESC";
+			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT, M.NAME NAME "
+			+ "FROM BOARD B LEFT OUTER JOIN MEMBER M ON M.MID = B.MID WHERE B.TITLE LIKE ? ORDER BY B.BID DESC";
+	private static final String SELECT_ALL_MID = //"SELECT * FROM BOARD WHERE MID = ? ORDER BY BID DESC";
+			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT,M.NAME NAME "
+			+ "FROM BOARD B INNER JOIN MEMBER M ON M.MID = B.MID WHERE M.MID = ? ORDER BY B.BID DESC";
+	private static final String SELECT_ALL_BCOUNT = //"SELECT * FROM BOARD ORDER BY BCOUNT DESC, BID DESC";
+			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT, M.NAME NAME "
+			+ "FROM BOARD B LEFT OUTER JOIN MEMBER M ON M.MID = B.MID ORDER BY B.BCOUNT DESC, B.BID DESC";
+	private static final String SELECT_ALL_NAME = // 찾는 이름만 같은 모든 글 출력
+			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT,M.NAME NAME"
+			+ "FROM BOARD B INNER JOIN MEMBER M ON M.MID = B.MID WHERE M.NAME = ? ORDER BY B.BID DESC";
 
 	private static final String SELECT_ONE = "SELECT * FROM BOARD WHERE BID = ?";
 
@@ -40,7 +51,7 @@ public class BoardDAO {
 			}
 			else if(boardDTO.getCondition().equals("TITLE")) {
 				pstmt = conn.prepareStatement(SELECT_ALL_TITLE);
-				pstmt.setString(1, boardDTO.getTitle()); // ★
+				pstmt.setString(1, "%" + boardDTO.getTitle() + "%");
 			}
 			else if(boardDTO.getCondition().equals("MID")) {
 				pstmt = conn.prepareStatement(SELECT_ALL_MID);
@@ -49,6 +60,10 @@ public class BoardDAO {
 			else if(boardDTO.getCondition().equals("BCOUNT")) {
 				pstmt = conn.prepareStatement(SELECT_ALL_BCOUNT);
 			}
+			else if(boardDTO.getCondition().equals("NAME")) {
+				pstmt = conn.prepareStatement(SELECT_ALL_NAME);
+				pstmt.setString(1, boardDTO.getWriter());
+			}
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				BoardDTO data = new BoardDTO();
@@ -56,6 +71,7 @@ public class BoardDAO {
 				data.setTitle(rs.getString("TITLE"));
 				data.setContent(rs.getString("CONTENT"));
 				data.setMid(rs.getString("MID"));
+				data.setWriter(rs.getString("NAME"));
 				data.setBcount(rs.getInt("BCOUNT"));
 				datas.add(data);
 			}

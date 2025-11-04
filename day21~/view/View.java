@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import model.dto.BoardDTO;
+import model.dto.MemberDTO;
 
 public class View {
 	private static Scanner sc = new Scanner(System.in);
+	private static final String NODATA="탈퇴한 사용자"; 
 	
 	public void printJoinInfo() {
 		System.out.println("존재하는 아이디입니다! 다시 입력해주세요!~~");
@@ -41,17 +43,32 @@ public class View {
 		int num = sc.nextInt();
 		return num;
 	}
-	public void printBoardData(BoardDTO data) {
-		if(data == null) {
-			System.out.println("출력할 내용이 없습니다!");
-			return;
-		}
+	public void printNoBoardData() {
+		System.out.println("출력할 내용이 없습니다!");
+	}
+	
+	public int printBoardData(BoardDTO data, MemberDTO userInfo) {
+		String writer = data.getWriter() == null ? NODATA : data.getWriter();
 		
 		System.out.println("글 번호 : "+data.getBid());
 		System.out.println("제목 : "+data.getTitle());
 		System.out.println("내용 : "+data.getContent());
-		System.out.println("작성자 : "+data.getMid());
+		System.out.println("작성자 : "+ writer);
 		System.out.println("조회수 : "+data.getBcount());
+		
+		System.out.println();
+		// 본인글이면 또는 접속한 사람이 관리자라면
+		// == 현재 로그인한 사람의 정보 == 작성자의 정보
+		if( userInfo.getMrole().equals("ADMIN") || 
+				userInfo.getMid().equals(data.getMid())) {
+			System.out.println("12. 제목변경");
+			System.out.println("13. 내용 변경");
+			System.out.println("14. 글 삭제");
+		}
+		
+		System.out.print("15. 메뉴로 돌아가기");
+		int num = sc.nextInt();
+		return num;
 	}
 	public void printBoardDatas(ArrayList<BoardDTO> datas) {
 		if(datas.isEmpty()) {
@@ -59,9 +76,10 @@ public class View {
 			return;
 		}
 		
-		System.out.println("글 번호 \t 글 제목 \t 작성자 \t 조회수");
+		System.out.println("글 번호 \t 글 제목 \t 작성자 \t\t 조회수");
 		for(BoardDTO data:datas) {
-			System.out.println(data.getBid() + " \t " + data.getTitle() + " \t " + data.getMid() + " \t " + data.getBcount());
+			String writer = data.getWriter() == null ? NODATA : data.getWriter()+"\t";
+			System.out.println(data.getBid() + " \t " + data.getTitle() + " \t " + writer + " \t " + data.getBcount());
 		}
 	}
 	public String getTitle() {

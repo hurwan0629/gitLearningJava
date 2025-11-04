@@ -170,7 +170,66 @@ public class Controller {
 				
 				boardDTO = new BoardDTO();		
 				boardDTO.setBid(bid);
-				view.printBoardData(boardDAO.selectOne(boardDTO));
+				BoardDTO data = boardDAO.selectOne(boardDTO);
+				if(data!=null) {
+					command = view.printBoardData(data, userInfo);
+					
+				}
+				else {
+					view.printNoBoardData();
+					continue;
+				}
+
+				// 제목 변경
+				if (command == 12) {
+					String title = view.getTitle();
+					
+					boardDTO = new BoardDTO();
+					boardDTO.setCondition("UPDATE_TITLE");
+					boardDTO.setTitle(title);
+					boardDTO.setBid(data.getBid()); // 지금 화면에 출력한 글의 bid
+					
+					boolean flag = boardDAO.update(boardDTO);
+					if(flag) {
+						view.printFunc01();
+					}
+					else {
+						view.printFunc02();
+					}
+						
+				} 
+				// 내용 변경
+				else if (command == 13) {
+					String content = view.getContent();
+
+					boardDTO = new BoardDTO();
+					boardDTO.setCondition("UPDATE_CONTENT");
+					boardDTO.setContent(content);
+					boardDTO.setBid(data.getBid());
+					
+					boolean flag = boardDAO.update(boardDTO);
+					if(flag) {
+						view.printFunc01();
+					}
+					else {
+						view.printFunc02();
+					}
+				} 
+				// 내용 삭제
+				else if (command == 14) {
+					boardDTO = new BoardDTO();
+					boardDTO.setBid(data.getBid());
+					boolean flag = this.boardDAO.delete(boardDTO);
+					if(flag) {
+						view.printFunc01();
+					}
+					else {
+						view.printFunc02();
+					}
+				}
+//				else if (command == 15) {
+//
+//				}
 			}
 			else if(command == 9) {
 				// 제목으로 글 검색
@@ -185,11 +244,11 @@ public class Controller {
 			else if(command == 10) {
 				// 작성자로 글 검색
 
-				String mid = view.inputMid();
+				String name = view.inputName();
 
 				BoardDTO boardDTO = new BoardDTO();
-				boardDTO.setCondition("MID");
-				boardDTO.setMid(mid);
+				boardDTO.setCondition("NAME");
+				boardDTO.setWriter(name);
 				view.printBoardDatas(boardDAO.selectAll(boardDTO));
 			}
 			else if(command == 11) {
@@ -198,15 +257,6 @@ public class Controller {
 				BoardDTO boardDTO = new BoardDTO();
 				boardDTO.setCondition("BCOUNT");
 				view.printBoardDatas(boardDAO.selectAll(boardDTO));
-			}
-			else if(command == 12) {
-				// 글 내용 변경
-			}
-			else if(command == 13) {
-				// 글 제목 변경
-			}
-			else if(command == 14) {
-				// 글 삭제
 			}
 		}
 	}
