@@ -1,10 +1,13 @@
 package controller;
 
+import java.util.ArrayList;
+
 import model.dao.BoardDAO;
 import model.dao.MemberDAO;
 import model.dao.ReplyDAO;
 import model.dto.BoardDTO;
 import model.dto.MemberDTO;
+import model.dto.ReplyDTO;
 import view.View;
 
 public class Controller {
@@ -122,7 +125,16 @@ public class Controller {
 					view.printFunc02();
 					continue;
 				}
-
+				
+				
+				// 모든 글 테이블의 정보들을 확인하며 
+				// 탈퇴할 사용자가 작성한 글은 없는지 체크한다.
+				// 글이 존재한다면 해당 글 작성자를 NULL로 변경한다.
+				BoardDTO boardDTO = new BoardDTO();
+				boardDTO.setMid(memberDTO.getMid());
+				boardDTO.setCondition("MEMBER");
+				boardDAO.update(boardDTO);
+				
 				boolean flag = memberDAO.delete(memberDTO);
 				if(flag) {
 					userInfo = null; // 로그아웃 처리
@@ -172,7 +184,10 @@ public class Controller {
 				boardDTO.setBid(bid);
 				BoardDTO data = boardDAO.selectOne(boardDTO);
 				if(data!=null) {
-					command = view.printBoardData(data, userInfo);
+					ReplyDTO replyDTO = new ReplyDTO();
+					replyDTO.setBid(data.getBid());
+					ArrayList<ReplyDTO> rdatas = replyDAO.selectAll(replyDTO);
+					command = view.printBoardData(data, userInfo, rdatas);
 					
 				}
 				else {
@@ -230,6 +245,26 @@ public class Controller {
 //				else if (command == 15) {
 //
 //				}
+				else if (command == 16) {
+					// 댓글 작성
+					
+					// v한테서 댓글 내용 받아오기
+					String content = view.getContent();
+					ReplyDTO replyDTO = new ReplyDTO();
+					replyDTO.setContent(content);
+					replyDTO.setMid(userInfo.getMid());
+					replyDTO.setBid(data.getBid());
+					
+					// m한테 insert로 넘기기
+					boolean flag = replyDAO.insert(replyDTO);
+					if(flag) {
+						view.printFunc01();
+					}
+					else {
+						view.printFunc02();
+					}
+					// 작성 완료 성공여부 출력
+				}
 			}
 			else if(command == 9) {
 				// 제목으로 글 검색

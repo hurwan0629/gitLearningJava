@@ -84,7 +84,7 @@ public class MemberDAO {
 		String driverName = "oracle.jdbc.driver.OracleDriver";
 
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "TEEMO";
+		String user = "C##HURWAN";
 		String password = "1234";
 
 		Connection conn = null;
@@ -132,7 +132,7 @@ public class MemberDAO {
 		String driverName = "oracle.jdbc.driver.OracleDriver";
 
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "TEEMO";
+		String user = "C##HURWAN";
 		String password = "1234";
 
 		Connection conn = null;
@@ -180,7 +180,7 @@ public class MemberDAO {
 		String driverName = "oracle.jdbc.driver.OracleDriver";
 
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
-		String user = "TEEMO";
+		String user = "C##HURWAN";
 		String password = "1234";
 
 		Connection conn = null;

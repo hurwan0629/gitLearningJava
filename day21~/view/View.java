@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import model.dto.BoardDTO;
 import model.dto.MemberDTO;
+import model.dto.ReplyDTO;
 
 public class View {
 	private static Scanner sc = new Scanner(System.in);
@@ -47,7 +48,11 @@ public class View {
 		System.out.println("출력할 내용이 없습니다!");
 	}
 	
-	public int printBoardData(BoardDTO data, MemberDTO userInfo) {
+	// 글 세부사항 출력하기
+	// 느낌이 하나의 페이지(html이라던가)를 만들어서 거기에서 출력도 하고 입력도 받을 수 있는거같은거?
+	// 지금 자바에서는 인자를 하나만 만들 수있어서 이렇게 return을 하나만 만들지만(배열이나 DTO빼고)
+	// 실제 페이지에서는 하나의 페이지에서 많은 요청과 return이 있을 수 있다. 이런느낌인가?ㅁㄴㄴ
+	public int printBoardData(BoardDTO data, MemberDTO userInfo, ArrayList<ReplyDTO> rdatas) {
 		String writer = data.getWriter() == null ? NODATA : data.getWriter();
 		
 		System.out.println("글 번호 : "+data.getBid());
@@ -57,8 +62,20 @@ public class View {
 		System.out.println("조회수 : "+data.getBcount());
 		
 		System.out.println();
+		System.out.println("=== 댓글 목록 ===");
+		if(rdatas.isEmpty()) {
+			System.out.println("댓글 없음!");
+		}
+		else {
+			for(ReplyDTO rdata: rdatas) {
+				System.out.println(rdata);
+			}
+		}
+		System.out.println("===============");
+		System.out.println();
 		// 본인글이면 또는 접속한 사람이 관리자라면
 		// == 현재 로그인한 사람의 정보 == 작성자의 정보
+		// 만약에 관리자에게 다른 기능을 만들 수 있으면 else if로 떼어놓아야함
 		if( userInfo.getMrole().equals("ADMIN") || 
 				userInfo.getMid().equals(data.getMid())) {
 			System.out.println("12. 제목변경");
@@ -66,10 +83,13 @@ public class View {
 			System.out.println("14. 글 삭제");
 		}
 		
-		System.out.print("15. 메뉴로 돌아가기");
+		System.out.println("15. 메뉴로 돌아가기");
+		System.out.println("16. 댓글 작성");
+		System.out.print(" >>> ");
 		int num = sc.nextInt();
 		return num;
 	}
+	// 모든 글 출력하기
 	public void printBoardDatas(ArrayList<BoardDTO> datas) {
 		if(datas.isEmpty()) {
 			System.out.println("출력할 글이 없습니다!");
@@ -78,10 +98,12 @@ public class View {
 		
 		System.out.println("글 번호 \t 글 제목 \t 작성자 \t\t 조회수");
 		for(BoardDTO data:datas) {
+			// 글을 출력할 때 삭제된 사용자들은 NODATA값으로 출력하게 삼항연산자로 String 만들기
 			String writer = data.getWriter() == null ? NODATA : data.getWriter()+"\t";
 			System.out.println(data.getBid() + " \t " + data.getTitle() + " \t " + writer + " \t " + data.getBcount());
 		}
 	}
+	
 	public String getTitle() {
 		System.out.print("글 제목 입력 >> ");
 		String title = sc.next();

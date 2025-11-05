@@ -25,7 +25,7 @@ public class BoardDAO {
 	private static final String SELECT_ALL_NAME = // 찾는 이름만 같은 모든 글 출력
 			"SELECT B.BID BID, B.TITLE TITLE, B.CONTENT CONTENT, B.MID MID, B.BCOUNT BCOUNT,M.NAME NAME"
 			+ "FROM BOARD B INNER JOIN MEMBER M ON M.MID = B.MID WHERE M.NAME = ? ORDER BY B.BID DESC";
-
+	
 	private static final String SELECT_ONE = "SELECT * FROM BOARD WHERE BID = ?";
 
 	private static final String INSERT = "INSERT INTO BOARD(BID,TITLE,CONTENT,MID) VALUES((SELECT NVL(MAX(BID),100) FROM BOARD)+1,?,?,?)";
@@ -34,6 +34,7 @@ public class BoardDAO {
 	private static final String UPDATE_BCOUNT = "UPDATE BOARD SET BCOUNT = BCOUNT+1 WHERE BID = ?";
 	private static final String UPDATE_TITLE = "UPDATE BOARD SET TITLE = ? WHERE BID = ?";
 	private static final String UPDATE_CONTENT = "UPDATE BOARD SET CONTENT = ? WHERE BID = ?";
+	private static final String UPDATE_MEMBER = "UPDATE BOARD SET MID = NULL WHERE MID = ?";
 
 
 
@@ -151,6 +152,10 @@ public class BoardDAO {
 				pstmt = conn.prepareStatement(UPDATE_TITLE);
 				pstmt.setString(1, boardDTO.getTitle());
 				pstmt.setInt(2, boardDTO.getBid());
+			}
+			else if(boardDTO.getCondition().equals("MEMBER")) {
+				pstmt = conn.prepareStatement(UPDATE_MEMBER);
+				pstmt.setString(1, boardDTO.getMid());
 			}
 			int result = pstmt.executeUpdate();
 			if(result <= 0) {
