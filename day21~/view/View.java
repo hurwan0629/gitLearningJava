@@ -23,7 +23,7 @@ public class View {
 		System.out.println("11. 조회수 순서대로 글 전체출력");
 		System.out.println("0. 프로그램 종료");
 	}
-	public void printMenu02() {
+	public int printMenu02() {
 		System.out.println("3. 로그아웃");
 		System.out.println("4. 회원 이름변경");
 		System.out.println("5. 회원탈퇴");
@@ -31,6 +31,18 @@ public class View {
 		System.out.println("8. 글 상세보기");
 		System.out.println("0. 프로그램 종료");
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	public int getBoardMenuNum() {
 		System.out.println("12. 글 내용 변경");
 		System.out.println("13. 글 제목 변경");
@@ -39,11 +51,7 @@ public class View {
 		int num = sc.nextInt();
 		return num;
 	}
-	public int inputBoardNum() {
-		System.out.print("글 번호 입력 >> ");
-		int num = sc.nextInt();
-		return num;
-	}
+	
 	public void printNoBoardData() {
 		System.out.println("출력할 내용이 없습니다!");
 	}
@@ -78,7 +86,6 @@ public class View {
 		// 만약에 관리자에게 다른 기능을 만들 수 있으면 else if로 떼어놓아야함
 		if( userInfo.getMrole().equals("ADMIN") || 
 				userInfo.getMid().equals(data.getMid())) {
-			System.out.println("12. 제목변경");
 			System.out.println("13. 내용 변경");
 			System.out.println("14. 글 삭제");
 		}
