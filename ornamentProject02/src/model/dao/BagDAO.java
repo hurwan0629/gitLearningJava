@@ -78,6 +78,7 @@ public class BagDAO {
 				return false;
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		System.out.print("BagDAO.insert [성공 로그] ");
