@@ -28,10 +28,15 @@ public class Controller {
 	}
 	public void startApp() {
 		while(true) {
-			if(userInfo != null) {
-				// 로그인 했을 때 메뉴 출력
-				view.printUserMenu();
-				
+			if (userInfo != null) {
+
+				if (userInfo.getMemberRole().equals("ADMIN")) {
+					// 관리자모드로 로그인했을때 메뉴출력
+					view.printAdminMenu();
+				} else {
+					// 일반회원 로그인 했을 때 메뉴 출력
+					view.printUserMenu();
+				}
 			} else {
 				// 로그인 안했을 때 메뉴 출력
 				view.printQuitMenu();
@@ -95,7 +100,6 @@ public class Controller {
 					userInfo = memberDTO;//멤버디티오에 유저정보 담아주기
 					userInfo.setMemberPassword(null);//비번가려주기
 					view.printLoginSuccess();//뷰에서 로그인 성공안내 가져오기
-					
 				}
 			}
 			else if(command == 3) { // 로그아웃
@@ -162,10 +166,11 @@ public class Controller {
 					view.printAddProductFail();
 				}
 			}
+			// 상품 전체출력
 			else if(command == 7) { 
 				// 상품 전체 출력
 				ProductDTO productDTO = new ProductDTO();
-				productDTO.setCondition("ALLDESC"); // 기본은 상품PK내림차순
+				productDTO.setCondition("ALL_DESC"); // 기본은 상품PK내림차순
 				view.printAllProducts(productDAO.selectAll(productDTO)); // view에서 datas 출력하기
 				
 				if(command == 12) { // 검색어로 출력
@@ -208,6 +213,7 @@ public class Controller {
 					view.printAllProducts(productDAO.selectAll(productDTO));
 				}
 			}
+			// 물건 상세보기
 			else if(command == 8) { 
 				// 물건 상세 보기
 				// 어떤 상픔을 상세보기할 건지 
@@ -235,8 +241,8 @@ public class Controller {
 				// 있을 경우 222
 				if(command == 10) { // 바로 구매하기
 					// 몇 개 구매하는지 입력받기
-					int productCnt = view.buyProductCount();//////  = view.몇개구매하는지메서드호출();
-					
+					int productCnt = view.buyProductCount();
+					 
 					productDTO = new ProductDTO();
 					productDTO.setCondition("BUY_PRODUCT"); // condition
 					productDTO.setProductCount(productCnt); // 입력 개수 넘기기
@@ -299,7 +305,8 @@ public class Controller {
 						view.printBuyFail();
 					}					
 				}
-				else if(command == 9) { // 관리자 기능
+				// 관리자 기능
+				else if(command == 9) { 
 					// 상품 삭제
 					// View에서 상품 삭제 여부 물어보기
 					boolean flag = view.printDeleteProduct();

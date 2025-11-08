@@ -56,7 +56,7 @@ public class View {
 		System.out.println("로그아웃 하시겠습니까??");
 		System.out.println("1. 예      2. 아니오");
 		int num = sc.nextInt();
-		if(num==1) {
+		if (num == 1) {
 			flag = true;
 		} else {
 			flag = false;
@@ -85,8 +85,8 @@ public class View {
 	}
 
 	public void printAddProductFail() { // 상품 추가 실패 출력문
-	      System.out.println("상품 추가 실패...");
-	      System.out.println("해당 상품이 존재하지 않거나 시스템의 오류가 일어났습니다.");
+		System.out.println("상품 추가 실패...");
+		System.out.println("해당 상품이 존재하지 않거나 시스템의 오류가 일어났습니다.");
 	}
 
 	public void printQuitSuccess() { // 회원 탈퇴 성공 출력문
@@ -113,36 +113,36 @@ public class View {
 
 	public int inputProductPrice() { // 상품 가격 입력
 		int productPrice;
-		while(true) {
+		while (true) {
 			System.out.print("상품 가격 입력 >> ");
 			productPrice = sc.nextInt();
-			if(productPrice<=0) {
-				break;		
+			if (productPrice <= 0) {
+				break;
 			}
 			System.out.println("금액을 다시 입력하세요(0원인 물품은 없습니다.)");
-		}		
+		}
 		return productPrice;
 	}
 
 	public int inputProductCount() { // 상품 재고 입력
 		int productCount;
-		while(true) {
+		while (true) {
 			System.out.print("상품 재고 입력 >> ");
 			productCount = sc.nextInt();
-			if(productCount<0) {
+			if (productCount < 0) {
 				break;
 			}
 			System.out.println("수량을 다시 입력해주세요");
 		}
 		return productCount;
 	}
-	
+
 	public int buyProductCount() { // 상품 구매 수량 입력
 		int cnt;
-		while(true) {
+		while (true) {
 			System.out.print("구매할 상품 수량 입력 >> ");
 			cnt = sc.nextInt();
-			if(cnt<0) {
+			if (cnt < 0) {
 				break;
 			}
 			System.out.println("구매할 수량을 제대로 입력해주세요.");
@@ -169,7 +169,7 @@ public class View {
 		System.out.println("1. 예      2. 아니오");
 		System.out.println("선택 1       2");
 		int num = sc.nextInt();
-		if(num==1) {
+		if (num == 1) {
 			flag = true;
 		}
 		flag = false;
@@ -182,7 +182,7 @@ public class View {
 
 	public String inputSearch() { // 검색어 입력
 		System.out.println("검색어 입력 >> ");
-		String search = sc.next();		
+		String search = sc.next();
 		return search;
 	}
 
@@ -195,10 +195,10 @@ public class View {
 
 	public int addInventory() { // 상품 재고추가
 		int num;
-		while(true) {
+		while (true) {
 			System.out.println("추가할 수량 입력 : ");
 			num = sc.nextInt();
-			if(num<=0) {
+			if (num <= 0) {
 				break;
 			}
 			System.out.println("추가할 수량을 다시 입력해주세요(0개를 추가할 수 없습니다.)");
@@ -216,24 +216,21 @@ public class View {
 	public String inputBrandNum() { // 브랜드 선택 입력
 		// 사용자가 숫자를 입력하면
 		int num;
-		while(true) {
+		while (true) {
 			System.out.println("번호 입력 >> ");
 			num = sc.nextInt();
-			if(0<num && num<5) {
+			if (0 < num && num < 5) {
 				break;
 			}
 			System.out.println("다시 입력해주세요");
 		}
-		if(num == 1) {
+		if (num == 1) {
 			return "텐바이텐";
-		}
-		else if(num == 2) {
+		} else if (num == 2) {
 			return "제이큐";
-		}
-		else if(num == 3) {
+		} else if (num == 3) {
 			return "더원스토리";
-		}
-		else if(num == 4) {
+		} else if (num == 4) {
 			return "아트박스";
 		}
 		return null;
@@ -242,18 +239,26 @@ public class View {
 	public void printAllProducts(ArrayList<ProductDTO> datas) { // 상품 전체 출력
 		// [물품이름], [가격], [브랜드] <- 이렇게 보여줄게
 		// 5개 상품을 보여줄게
-		for(int i=0;i<5;i++) {
-			System.out.println("["+datas.get(i).getProductName()+"], ["+datas.get(i).getProductPrice()+"], ["+datas.get(i).getProductBrand()+"]");
+		System.out.println("=== 상품 ===");
+		if(datas.size()==0) {
+			System.out.println("상품이 존재하지 않습니다.");
 		}
+		else {
+			for (int i = 0; i < datas.size()%5; i++) {
+				System.out.println("[" + datas.get(i).getProductName() + "], [" + datas.get(i).getProductPrice() + "], ["
+						+ datas.get(i).getProductBrand() + "]");
+			}
+		}
+		System.out.println("===========");
 	}
 
 	public int inputProductNum() { // 상품번호입력
 		// 사용자에게 상품 목록에 있는 1~5중 번호를 입력받는다
 		int num;
-		while(true) {
+		while (true) {
 			System.out.println("상품 선택 >> ");
 			num = sc.nextInt();
-			if(0<=num && 5<num) {
+			if (0 <= num && 5 < num) {
 				break;
 			}
 			System.out.println("범위 내(1~5)에서 다시 입력해주세요");
@@ -262,50 +267,57 @@ public class View {
 	}
 
 	public int getPK() { // 상품PK입력
-	
-	int num;
 
-	System.out.print("상품 pk 입력 >> ");
-	num = sc.nextInt();
-	
-	return num;
+		int num;
+
+		System.out.print("상품 pk 입력 >> ");
+		num = sc.nextInt();
+
+		return num;
 	}
-	
+
 	public void printMypage(MemberDTO memberDTO) { // 마이페이지출력
-	      System.out.println("아이디 : " + memberDTO.getMemberId());
-	      System.out.println("이름 : " + memberDTO.getMemberName());
-	      System.out.println("주소 : " + memberDTO.getMemberAddress());
-	      System.out.println("핸드폰번호 : " + memberDTO.getMemberPhoneNumber());
-	      System.out.println("7. 회원 탈퇴");
+		System.out.println("아이디 : " + memberDTO.getMemberId());
+		System.out.println("이름 : " + memberDTO.getMemberName());
+		System.out.println("주소 : " + memberDTO.getMemberAddress());
+		System.out.println("핸드폰번호 : " + memberDTO.getMemberPhoneNumber());
+		System.out.println("7. 회원 탈퇴");
 	}
 
-	public void printQuitMenu() { // 비회원 메뉴 출력		
+	public void printQuitMenu() { // 비회원 메뉴 출력
 		System.out.println("1. 회원가입");
 		System.out.println("2. 로그인");
+		System.out.println("7.전체출력");
+		System.out.println("11. 장바구니");
 	}
 
-	public void printUserMenu() { // 회원 메뉴 출력	
+	public void printUserMenu() { // 회원 메뉴 출력
 		System.out.println("3. 로그아웃");
 		System.out.println("4. 마이페이지");
+		System.out.println("7.전체출력");
+		System.out.println("11. 장바구니");
+		
 	}
 
 	public void printAdminMenu() { // 관라지 메뉴 출력
 		System.out.println("4. 마이페이지");
 		System.out.println("5. 상품 추가");
 		System.out.println("6. 재고 추가");
+		System.out.println("7.전체출력");
+		System.out.println("11. 장바구니");
 	}
 
 	public int getMenuNum() { // 메뉴 선택 숫자 받기
 		int num;
-		while(true) {
-			System.out.print("메뉴 번호 입력 >> ");	
+		while (true) {
+			System.out.print("메뉴 번호 입력 >> ");
 			num = sc.nextInt();
-			if(0<num && num<16) {
+			if (0 < num && num < 16) {
 				return num;
 			}
 			System.out.println("다시 입력해주세요");
 		}
-		
+
 	}
 
 }
