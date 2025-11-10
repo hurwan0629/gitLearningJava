@@ -11,15 +11,17 @@ import model.dto.BagDTO;
 import model.dto.ProductDTO;
 
 public class BagDAO {
-	
-	private static final String SELECT_ALL_PRODUCT_IN_OWNER_BAG
+	// 1. select문
+	private static final String SELECT_ALL_PRODUCT_IN_OWNER_BAG 
 			= "SELECT B.BAG_PK, B.PRODUCT_PK, B.PRODUCT_COUNT AS BAG_PRODUCT_COUNT, B.MEMBER_PK, "
-					+ "P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_COUNT, P.PRODUCT_BRAND"
-				+ "FROM BAG B INNER JOIN PRODUCT P ON B.PRODUCT_PK = P.PRODUCT_PK WHERE B.MEMBER_PK = ?";
+			+ "P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_COUNT, P.PRODUCT_BRAND "
+			+ "FROM BAG B INNER JOIN PRODUCT P ON B.PRODUCT_PK = P.PRODUCT_PK WHERE B.MEMBER_PK = ?";
 	
+	// 2. pk는 자동설정, 상품pk, 담을 상품 개수, 회원pk 저장
 	private static final String INSERT_PRODUCT_AND_COUNT_INTO_BAG
 			= "INSERT INTO BAG(BAG_PK, PRODUCT_PK, PRODUCT_COUNT, MEMBER_PK) "
 					+ "VALUES(BAG_SEQ.NEXTVAL, ? , ? , ? )";
+	// 3. 장바구니 삭제하기
 	private static final String DELETE_CLEAR_MEMBER_BAG
 			= "DELETE FROM BAG WHERE MEMBER_PK = ?";
 	
@@ -29,13 +31,14 @@ public class BagDAO {
 	
 	public ArrayList<BagDTO> selectAll(BagDTO bagDTO){
 		// 로그
-		System.out.print("BagDAO.selectAll [로그] ");
+		System.out.println("BagDAO.selectAll [로그] ");
 		System.out.println(bagDTO);
 		////////////////////////////////////////////////////////////////////
 		Connection conn = JDBCUtil.connect();
 		// return datas;
 		ArrayList<BagDTO> datas = new ArrayList<>();
 		
+		// 상품 추가 
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(this.SELECT_ALL_PRODUCT_IN_OWNER_BAG);
 			pstmt.setInt(1, bagDTO.getMemberPk());
@@ -45,7 +48,7 @@ public class BagDAO {
 				bagDTO.setMemberPk(rs.getInt("MEMBER_PK"));
 				bagDTO.setProductPrice(rs.getInt("PRODUCT_PRICE"));
 				bagDTO.setProductBrand(rs.getString("PRODUCT_BRAND"));
-				bagDTO.setProductCount(rs.getInt("PRODUCT_COUNT"));
+				bagDTO.setProductCount(rs.getInt("BAG_PRODUCT_COUNT"));
 				bagDTO.setProductName(rs.getString("PRODUCT_NAME"));
 				bagDTO.setProductPk(rs.getInt("PRODUCT_PK"));
 				
@@ -54,34 +57,38 @@ public class BagDAO {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.print("BagDAO.selectAll [반환 로그] ");
+		System.out.println("BagDAO.selectAll [반환 로그] ");
 		return datas;
 	}
 	
 	public boolean insert(BagDTO bagDTO) {
 		// productPk, productConut , memebrPk,추가
 		// 로그
-		System.out.print("BagDAO.insert [시작 로그] bagDTO:");
+		System.out.println("BagDAO.insert [시작 로그] bagDTO:");
 		System.out.println(bagDTO);
 		////////////////////////////////////////////////////////////////////
 		Connection conn = JDBCUtil.connect();
 		
 		PreparedStatement pstmt;
 		try {
+			// 상품 PK, 개수, 회원정보 넣어서 보내기
 			pstmt = conn.prepareStatement(this.INSERT_PRODUCT_AND_COUNT_INTO_BAG);
 			pstmt.setInt(1, bagDTO.getProductPk());
 			pstmt.setInt(2, bagDTO.getProductCount());
 			pstmt.setInt(3, bagDTO.getMemberPk());
 			int rs = pstmt.executeUpdate();
+			// 상품이 추가되지 않으면 로그
 			if(rs <= 0) {
-				System.out.print("BagDAO.insert [실패 로그] ");
+				System.out.println("BagDAO.insert [실패 로그] ");
 				return false;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.out.println("BagDAO.insert [실패 로그] ");
+			return false;
 		}
-		System.out.print("BagDAO.insert [성공 로그] ");
+		System.out.println("BagDAO.insert [성공 로그] ");
 		return true;
 	}
 	
@@ -91,25 +98,26 @@ public class BagDAO {
 	
 	public boolean delete(BagDTO bagDTO) {
 		
-		System.out.print("BagDAO.delete [시작 로그] ");
+		System.out.println("BagDAO.delete [시작 로그] ");
 		System.out.println(bagDTO);
 		////////////////////////////////////////////////////////////////////
 		Connection conn = JDBCUtil.connect();
 		
 		PreparedStatement pstmt;
 		try {
+			// 특정 회원의 장바구니 모두 삭제
 			pstmt = conn.prepareStatement(this.DELETE_CLEAR_MEMBER_BAG);
 			pstmt.setInt(1, bagDTO.getMemberPk());
 			int rs = pstmt.executeUpdate();
 			
 			if(rs <= 0) {
-				System.out.print("BagDAO.delete [실패 로그] ");
+				System.out.println("BagDAO.delete [실패 로그] ");
 				return false;
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		System.out.print("BagDAO.delete [성공 로그] ");
+		System.out.println("BagDAO.delete [성공 로그] ");
 		return true;
 	}
 }

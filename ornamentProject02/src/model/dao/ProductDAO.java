@@ -11,21 +11,20 @@ import model.dto.ProductDTO;
 
 public class ProductDAO {
 	private static final String BRAND_ALL = "SELECT PRODUCT_BRAND FROM PRODUCT";
-	private static final String PRODUCT_ALL = "SELECT * FROM PRODUCT ORDER BY PRODUCT_PK DESC";
-	private static final String PRODUCT_SEARCH = "SELECT * FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
-	private static final String PRODUCT_ALL_DOWN = "SELECT * FROM PRODUCT ORDER BY PRODUCT_PRICE DESC";
-	private static final String PRODUCT_ALL_UP = "SELECT * FROM PRODUCT ORDER BY PRODUCT_PRICE";
-	private static final String PRODUCT_BRAND = "SELECT * FROM PRODUCT WHERE PRODUCT_BRAND = ?";
+	private static final String PRODUCT_ALL = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT ORDER BY PRODUCT_PK DESC";
+	private static final String PRODUCT_SEARCH = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT WHERE PRODUCT_NAME LIKE ?";
+	private static final String PRODUCT_ALL_DOWN = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT ORDER BY PRODUCT_PRICE DESC";
+	private static final String PRODUCT_ALL_UP = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT ORDER BY PRODUCT_PRICE";
+	private static final String PRODUCT_BRAND = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT WHERE PRODUCT_BRAND = ?";
 	private static final String PRODUCT_SELECT = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_COUNT, PRODUCT_BRAND FROM PRODUCT WHERE PRODUCT_pk = ?";
 	
 	private static final String INSERT_PRODUCT = "INSERT INTO PRODUCT VALUES(PRODUCT_SEQ.NEXTVAL,?,?,?,?)";
 	
 	private static final String UPDATE_ADD = "UPDATE PRODUCT SET PRODUCT_COUNT = PRODUCT_COUNT + ? WHERE PRODUCT_PK = ?";
-	private static final String UPDATE_BUY = "UPDATE PRODUCT SET PRODUCT_COUNT = PRODUCT_COUNT - ? WHERE PRODUCT_PK = ?;";
+	private static final String UPDATE_BUY = "UPDATE PRODUCT SET PRODUCT_COUNT = PRODUCT_COUNT - ? WHERE PRODUCT_PK = ?";
 	
 	private static final String DELETE_PRODUCT = "DELETE FROM PRODUCT WHERE PRODUCT_PK = ?";
-	
-	
+
 	// 상품 전체 보기
 	public ArrayList<ProductDTO> selectAll(ProductDTO productDTO){
 		ArrayList<ProductDTO> datas = new ArrayList<ProductDTO>(); // 보낼 데이터의 배열
@@ -37,15 +36,15 @@ public class ProductDAO {
 		PreparedStatement pstmt = null;
 		try {
 			if(productDTO.getCondition().equals("BRAND_UNIQUE")) { // 브랜드 전체 데이터
-				pstmt = conn.prepareStatement(BRAND_ALL);		
+				pstmt = conn.prepareStatement(BRAND_ALL);
 			}
 			else if(productDTO.getCondition().equals("ALL_DESC")) { // PK 내림차순 전체 데이터
 				pstmt = conn.prepareStatement(PRODUCT_ALL);
 			}
 			else if(productDTO.getCondition().equals("ALL_SEARCH")){ //해당 검색 포함한 상품 출력
 				pstmt = conn.prepareStatement(PRODUCT_SEARCH);
-				pstmt.setString(1, productDTO.getKeyword()); // 키워드(검색어) 받아야함
-			}
+				pstmt.setString(1, '%' + productDTO.getKeyword() + '%'); // 키워드(검색어) 받아야함
+			}               // '%' + boardDTO.getTitle() + '%'
 			else if(productDTO.getCondition().equals("ALL_PRICE_DESC")) { //가격 내림차순
 				pstmt = conn.prepareStatement(PRODUCT_ALL_DOWN); 
 			}
@@ -59,11 +58,17 @@ public class ProductDAO {
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
 				ProductDTO data = new ProductDTO();
-				data.setProductPK(rs.getInt("PRODUCT_PK")); // 상품번호(PK)
-				data.setProductName(rs.getString("PRODUCT_NAME")); // 상품 이름
-				data.setProductPrice(rs.getInt("PRODUCT_PRICE")); // 상품 가격
-				data.setProductCount(rs.getInt("PRODUCT_COUNT")); // 상품재고
-				data.setProductBrand(rs.getString("PRODUCT_BRAND")); // 상품 브랜드
+				
+				if(productDTO.getCondition().equals("BRAND_UNIQUE")) {
+					data.setProductBrand(rs.getString("PRODUCT_BRAND")); // 상품 브랜드		
+				} 
+				else {
+					data.setProductPK(rs.getInt("PRODUCT_PK")); // 상품번호(PK)
+					data.setProductName(rs.getString("PRODUCT_NAME")); // 상품 이름
+					data.setProductPrice(rs.getInt("PRODUCT_PRICE")); // 상품 가격
+					data.setProductCount(rs.getInt("PRODUCT_COUNT")); // 상품재고
+					data.setProductBrand(rs.getString("PRODUCT_BRAND")); // 상품 브랜드
+				}
 				datas.add(data); // 위의 배열에 정보 삽입
 			}
 		} catch (SQLException e) {
@@ -90,6 +95,7 @@ public class ProductDAO {
 			 pstmt.setInt(1, productDTO.getProductPK());
 			 ResultSet rs = pstmt.executeQuery();
 			 if(rs.next()) {
+				 data = new ProductDTO();
 				 data.setProductPK(rs.getInt("PRODUCT_PK"));
 				 data.setProductName(rs.getString("PRODUCT_NAME"));
 				 data.setProductPrice(rs.getInt("PRODUCT_PRICE"));
@@ -107,7 +113,7 @@ public class ProductDAO {
 	
 	
 	// 상품 추가
-	public static boolean insert(ProductDTO productDTO) {
+	public boolean insert(ProductDTO productDTO) {
 		// 1,2 드라이버 로드 / db 연결
 		Connection conn = JDBCUtil.connect();
 		
@@ -163,6 +169,7 @@ public class ProductDAO {
 		return true; // true 반환
 	}
 	
+	
 	// 상품 삭제
 	public boolean delete(ProductDTO productDTO) {
 		
@@ -178,13 +185,14 @@ public class ProductDAO {
 			if(result <= 0) {
 				return false;
 			}
-		} catch (SQLException e) {
+		}catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-		} finally {
+		}finally {
 			// db연결 해제
 			JDBCUtil.disconnect(conn, pstmt);
 		}
 		return true;
 	}
+
 }

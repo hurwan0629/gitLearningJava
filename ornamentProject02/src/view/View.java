@@ -3,6 +3,7 @@ package view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import model.dto.BagDTO;
 import model.dto.MemberDTO;
 import model.dto.ProductDTO;
 
@@ -63,7 +64,12 @@ public class View {
 		}
 		return flag;
 	}
-
+	public int inputProductCountToPutInBag() {
+		System.out.println("장바구니에 추가할 상품의 개수를 입력해주세요");
+		System.out.print(" >>> ");
+		int num = sc.nextInt();
+		return num;
+	}
 	public void printLogoutSuccess() { // 로그아웃 성공 출력문
 		System.out.println("로그아웃 성공!!");
 	}
@@ -142,12 +148,11 @@ public class View {
 		while (true) {
 			System.out.print("구매할 상품 수량 입력 >> ");
 			cnt = sc.nextInt();
-			if (cnt < 0) {
-				break;
+			if (cnt >= 0) {
+				return cnt;
 			}
 			System.out.println("구매할 수량을 제대로 입력해주세요.");
 		}
-		return cnt;
 	}
 
 	public void printSearchMenu() { // 검색 메뉴 출력문
@@ -181,7 +186,7 @@ public class View {
 	}
 
 	public String inputSearch() { // 검색어 입력
-		System.out.println("검색어 입력 >> ");
+		System.out.print("검색어 입력 >> ");
 		String search = sc.next();
 		return search;
 	}
@@ -190,7 +195,7 @@ public class View {
 		System.out.println("상품명 : " + data.getProductName());
 		System.out.println("가격 : " + data.getProductPrice());
 		System.out.println("브랜드 명 : " + data.getProductBrand());
-		System.out.println("상품 PK : " + data.getProductPK());
+		System.out.println("상품 PK : " + data.getProductPK());	
 	}
 
 	public int addInventory() { // 상품 재고추가
@@ -236,34 +241,60 @@ public class View {
 		return null;
 	}
 
-	public void printAllProducts(ArrayList<ProductDTO> datas) { // 상품 전체 출력
+	public int printAllProducts(ArrayList<ProductDTO> datas) { // 상품 전체 출력
 		// [물품이름], [가격], [브랜드] <- 이렇게 보여줄게
 		// 5개 상품을 보여줄게
-		System.out.println("=== 상품 ===");
-		if(datas.size()==0) {
-			System.out.println("상품이 존재하지 않습니다.");
+		if(datas.isEmpty()) {
+			System.out.println("출력할 데이터가 없습니다");
+		} 
+		else {
+			for (int i = 0; i< ((datas.size()<5) ? datas.size() : 5); i++) {
+				System.out.println("[" + datas.get(i).getProductName() + "], [" + datas.get(i).getProductPrice() + "], ["+ datas.get(i).getProductBrand() + "]");
+			}
+			System.out.println("  12. 검색어로 출력");
+			System.out.println("  13. 가격 내림차순");
+			System.out.println("  14. 가격 오름차순");
+			System.out.println("  15. 브랜드별");
+			System.out.println("8. 상품 상세보기");
+		}
+		int num;
+		while(true) {
+			num=sc.nextInt();
+			if(num==12 || num==13 || num==14 || num==15 || num==8) {
+				return num;
+			}
+			System.out.println("알맞은 번호를 눌러주세요");
+		}
+	}
+
+	public void printBag(ArrayList<BagDTO> datas) {
+		System.out.println(" --- 장바구니 --- ");
+		if(datas.isEmpty()) {
+			System.out.println("장바구니가 비어있습니다.");
 		}
 		else {
-			for (int i = 0; i < datas.size()%5; i++) {
-				System.out.println("[" + datas.get(i).getProductName() + "], [" + datas.get(i).getProductPrice() + "], ["
-						+ datas.get(i).getProductBrand() + "]");
+			for(int i=0;i<datas.size();i++) {
+				System.out.println("상품 이름: " + datas.get(i).getProductName());
+				System.out.println("브랜드: " + datas.get(i).getProductBrand());
+				System.out.println("개수: " + datas.get(i).getProductCount());
+				System.out.println("가격: " + datas.get(i).getProductPrice());
 			}
 		}
-		System.out.println("===========");
+		System.out.println(" --- ---- --- ");
 	}
 
 	public int inputProductNum() { // 상품번호입력
 		// 사용자에게 상품 목록에 있는 1~5중 번호를 입력받는다
 		int num;
 		while (true) {
-			System.out.println("상품 선택 >> ");
+			System.out.print("상품 선택 >> ");
 			num = sc.nextInt();
-			if (0 <= num && 5 < num) {
-				break;
+			if (1 <= num && 5 >= num) {
+				return num+100; // 여기 수정
+			} else {
+				System.out.println("범위 내(1~5)에서 다시 입력해주세요");
 			}
-			System.out.println("범위 내(1~5)에서 다시 입력해주세요");
 		}
-		return num;
 	}
 
 	public int getPK() { // 상품PK입력
@@ -276,48 +307,130 @@ public class View {
 		return num;
 	}
 
-	public void printMypage(MemberDTO memberDTO) { // 마이페이지출력
+	public int printMypage(MemberDTO memberDTO) { // 마이페이지출력
 		System.out.println("아이디 : " + memberDTO.getMemberId());
 		System.out.println("이름 : " + memberDTO.getMemberName());
 		System.out.println("주소 : " + memberDTO.getMemberAddress());
 		System.out.println("핸드폰번호 : " + memberDTO.getMemberPhoneNumber());
-		System.out.println("7. 회원 탈퇴");
+		System.out.println("20. 회원 탈퇴");
+		System.out.println("25. 메인페이지로 돌아가기");
+		int num;
+		while(true) {
+			num = sc.nextInt();
+			if(num==20) {
+				return num;
+			}
+			else if(num==25) {
+				return num;
+			}
+			System.out.println("다시 입력해주세요 ( 25 또는 20 )");
+		}
+	}
+	public void printWrongPassword() {
+		System.out.println("잘못된 비밀번호입니다.");
+	}
+	
+	// 탈퇴 여부 확인 1: 예 2: 아니오
+	public int isCheckQuit() {
+		System.out.println("정말로 탈퇴하시겠습니까?");
+		System.out.println("1. 예");
+		System.out.println("2. 아니오");
+		int num=0;
+		while(true) {
+			num = sc.nextInt();
+			if(num==1) {
+				return num;
+			}
+			else if(num==2) {
+				return num;
+			}
+			System.out.println("다시 입력해주세요 ( 1 또는 2 )");
+		}
 	}
 
-	public void printQuitMenu() { // 비회원 메뉴 출력
+	public int printQuitMenu() { // 비회원 메뉴 출력
 		System.out.println("1. 회원가입");
 		System.out.println("2. 로그인");
 		System.out.println("7.전체출력");
 		System.out.println("11. 장바구니");
+		int num=0;
+		while (true) {
+			System.out.print("메뉴 번호 입력 >> ");
+			num = sc.nextInt();
+			if (num==1 || num==2 || num==7 || num==11) {
+				return num;
+			}
+			System.out.println("다시 입력해주세요");
+		}
 	}
 
-	public void printUserMenu() { // 회원 메뉴 출력
+	public int printUserMenu() { // 회원 메뉴 출력
 		System.out.println("3. 로그아웃");
 		System.out.println("4. 마이페이지");
 		System.out.println("7.전체출력");
 		System.out.println("11. 장바구니");
-		
+		int num;
+		while (true) {
+			System.out.print("메뉴 번호 입력 >> ");
+			num = sc.nextInt();
+			if (num==3 || num==4 || num==7 || num==11) {
+				return num;
+			}
+			System.out.println("다시 입력해주세요");
+		}
+	}
+	
+	// 상세보기 했을 때만 보이는 메뉴!!
+	public int printDetailedMenu() {
+		System.out.println("10. 바로 구매하기");
+		System.out.println("23. 장바구니 추가");
+		int num;
+		while (true) {
+			System.out.print("메뉴 번호 입력 >> ");
+			num = sc.nextInt();
+			if (num==10 || num==23) {
+				return num;
+			}
+			System.out.println("다시 입력해주세요");
+		}
 	}
 
-	public void printAdminMenu() { // 관라지 메뉴 출력
+	public int printAdminMenu() { // 관라지 메뉴 출력
 		System.out.println("4. 마이페이지");
 		System.out.println("5. 상품 추가");
 		System.out.println("6. 재고 추가");
 		System.out.println("7.전체출력");
 		System.out.println("11. 장바구니");
-	}
-
-	public int getMenuNum() { // 메뉴 선택 숫자 받기
 		int num;
 		while (true) {
 			System.out.print("메뉴 번호 입력 >> ");
 			num = sc.nextInt();
-			if (0 < num && num < 16) {
+			if (num==4 || num==5 ||  num==6 || num==7 || num==11) {
 				return num;
 			}
 			System.out.println("다시 입력해주세요");
 		}
-
 	}
-
+	public int printBuy() {
+		System.out.println("물품들을 구매하시겠습니까?");
+		System.out.println("21. 예");
+		System.out.println("22. 아니오");
+		int num;
+		while(true) {
+			num = sc.nextInt();
+			if(num == 21 || num == 22) {
+				return num;
+			}
+			System.out.println("21 또는 22를 입력해주세요");
+		}
+	}
+	public void printLoginFirst() {
+		System.out.println("로그인 후 이용가능합니다.");
+	}
+	public void printProductBoughtSuccess(ProductDTO data) {
+		System.out.println(data.getProductName() +"," + data.getProductCount() +"개 구매완료");
+	}
+	public void printProductBoughtFailed(ProductDTO data) {
+		System.out.println(data.getProductName() +" 구매실패");
+	}
 }

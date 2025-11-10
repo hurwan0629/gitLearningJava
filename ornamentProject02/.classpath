@@ -6,7 +6,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Users/hurwa/Downloads/jsoup-1.21.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/hurwa/Downloads/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="C:/HUR/resource/jsoup-1.21.2.jar"/>
+	<classpathentry kind="lib" path="C:/HUR/resource/ojdbc6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

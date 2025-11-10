@@ -16,9 +16,9 @@ public class MemberDAO {
 	}
 	public MemberDTO selectOne(MemberDTO memberDTO){
 		/*ID 중복확인*/String SQL_SELECT_ONE_JOIN = "SELECT MEMBER_ID FROM TBL_MEMBER WHERE MEMBER_ID = ?";
-		/*로그인-->>*/String SQL_SELECT_ONE_LOGIN = "SELECT MEMBER_PASSWORD, MEMBER_ID, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE_NUMBER, MEMBER_ROLE FROM TBL_MEMBER WHERE MEMBER_ID = ? AND MEMBER_PASSWORD=?";   
-		/*회원탈퇴시 비밀번호 확인 부분->>*/ // LOGIN하고 같은기능
-		
+		/*로그인-->>*/String SQL_SELECT_ONE_LOGIN = "SELECT MEMBER_PK,MEMBER_PASSWORD, MEMBER_ID, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE_NUMBER, MEMBER_ROLE FROM TBL_MEMBER WHERE MEMBER_ID = ? AND MEMBER_PASSWORD=?";   
+		/*회원탈퇴시 비밀번호 확인 부분->>*/
+//		String SQL_SELECT_ONE_QUIT = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL WHERE MEMBER_ID = ?";
 		
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
@@ -44,6 +44,7 @@ public class MemberDAO {
 				if (rs.next()) {
 					data = new MemberDTO(); 
 					data.setMemberId(rs.getString("MEMBER_ID"));
+					data.setMemberPk(rs.getInt("MEMBER_PK"));
 					data.setMemberName(rs.getString("MEMBER_NAME"));
 					data.setMemberPassword(rs.getString("MEMBER_PASSWORD"));
 					data.setMemberAddress(rs.getString("MEMBER_ADDRESS"));
@@ -75,7 +76,7 @@ public class MemberDAO {
 	}
 	public boolean update(MemberDTO memberDTO){//회원탈퇴 업데이트
 		
-		String SQL_UPDATE = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL WHERE MEMBER_ID = ? AND MEMBER_PASSWORD = ?";
+		String SQL_UPDATE = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL, MEMBER_ROLE='QUIT' WHERE MEMBER_ID = ? AND MEMBER_PASSWORD = ?";
 
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
