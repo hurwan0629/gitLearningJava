@@ -11,12 +11,22 @@ import model.common.JDBCUtil;
 import model.dto.MemberDTO;
 
 public class MemberDAO {
+	public static final String SQL_INSERT = "INSERT INTO TBL_MEMBER VALUES(MEMBER_SEQ.NEXTVAL,?,?,?,?,?,'USER')";
+	
+	/*ID 중복확인*/
+	public static final String SQL_SELECT_ONE_JOIN = "SELECT MEMBER_ID FROM TBL_MEMBER WHERE MEMBER_ID = ?";
+	/*로그인-->>*/
+	public static final String SQL_SELECT_ONE_LOGIN = "SELECT MEMBER_PK,MEMBER_PASSWORD, MEMBER_ID, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE_NUMBER, MEMBER_ROLE FROM TBL_MEMBER WHERE MEMBER_ID = ? AND MEMBER_PASSWORD=?"; 
+	
+	public static final String SQL_UPDATE = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL, MEMBER_ROLE='QUIT' WHERE MEMBER_ID = ? AND MEMBER_PASSWORD = ?";
+	
+	
 	private ArrayList<MemberDTO> selectAll(MemberDTO memberDTO){
 		return null;
 	}
 	public MemberDTO selectOne(MemberDTO memberDTO){
-		/*ID 중복확인*/String SQL_SELECT_ONE_JOIN = "SELECT MEMBER_ID FROM TBL_MEMBER WHERE MEMBER_ID = ?";
-		/*로그인-->>*/String SQL_SELECT_ONE_LOGIN = "SELECT MEMBER_PK,MEMBER_PASSWORD, MEMBER_ID, MEMBER_NAME, MEMBER_ADDRESS, MEMBER_PHONE_NUMBER, MEMBER_ROLE FROM TBL_MEMBER WHERE MEMBER_ID = ? AND MEMBER_PASSWORD=?";   
+		
+		   
 		/*회원탈퇴시 비밀번호 확인 부분->>*/
 //		String SQL_SELECT_ONE_QUIT = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL WHERE MEMBER_ID = ?";
 		
@@ -76,7 +86,7 @@ public class MemberDAO {
 	}
 	public boolean update(MemberDTO memberDTO){//회원탈퇴 업데이트
 		
-		String SQL_UPDATE = "UPDATE TBL_MEMBER SET MEMBER_ID = NULL, MEMBER_ROLE='QUIT' WHERE MEMBER_ID = ? AND MEMBER_PASSWORD = ?";
+		
 
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
@@ -100,8 +110,6 @@ public class MemberDAO {
 		return true;//성공 true 실패 false
 	}
 	public boolean insert(MemberDTO memberDTO){//회원가입, 등급은 무조건 user
-		
-		String SQL_INSERT = "INSERT INTO TBL_MEMBER VALUES(MEMBER_SEQ.NEXTVAL,?,?,?,?,?,'USER')";
 		
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;

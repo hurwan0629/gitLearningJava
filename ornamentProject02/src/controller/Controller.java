@@ -21,7 +21,7 @@ public class Controller {
 	
 	public Controller() {
 		productDAO = new ProductDAO();
-//		CrawlingProducts.crawlProducts();
+		CrawlingProducts.crawlProducts();
 		memberDAO = new MemberDAO();
 		bagDAO = new BagDAO();
 		view = new View();
@@ -130,28 +130,34 @@ public class Controller {
 				if (command == 20) {
 					// 회원탈퇴하기
 					// QUIT 분기점 없애기로 해서 LOGIN사용함
-					String memberPassword = view.inputPassword();
-					// 현재로그인한사람 + 새로입력받은 비번이 올바른지체크하기
-					MemberDTO ckmemberDTO = new MemberDTO();
-					ckmemberDTO.setMemberId(userInfo.getMemberId());// 현재 로그인한 사람
-					ckmemberDTO.setCondition("LOGIN");
-					ckmemberDTO.setMemberPassword(memberPassword);// 새로입력한 비번
-					MemberDTO data = memberDAO.selectOne(ckmemberDTO);
-					// 멤버DAO에 입력한 정보가 일치하는지 요청하기
-					if (data==null) {// 업데이트 실패시
-						view.printWrongPassword();
-					} else {// 일치한다면
-						int num = view.isCheckQuit();
-						if(num == 1) {
-							memberDTO = new MemberDTO();
-							memberDTO.setMemberId(userInfo.getMemberId());// 현재 로그인한 사람
-							memberDTO.setMemberPassword(memberPassword);// 새로입력한 비번
-							boolean flag = memberDAO.update(memberDTO);
-							userInfo = null;// 로그아웃							
-							view.printQuitSuccess();
-						}
-						else {
-							continue;
+					
+					while(true) {
+						String memberPassword = view.inputPassword();
+						// 현재로그인한사람 + 새로입력받은 비번이 올바른지체크하기
+						MemberDTO ckmemberDTO = new MemberDTO();
+						ckmemberDTO.setMemberId(userInfo.getMemberId());// 현재 로그인한 사람
+						ckmemberDTO.setCondition("LOGIN");
+						ckmemberDTO.setMemberPassword(memberPassword);// 새로입력한 비번
+						MemberDTO data = memberDAO.selectOne(ckmemberDTO);
+						// 멤버DAO에 입력한 정보가 일치하는지 요청하기
+						if (data==null) {// 업데이트 실패시
+							view.printWrongPassword();
+						} else {// 일치한다면
+							int num = view.isCheckQuit();
+							if(num == 1) {
+								memberDTO = new MemberDTO();
+								memberDTO.setMemberId(userInfo.getMemberId());// 현재 로그인한 사람
+								memberDTO.setMemberPassword(memberPassword);// 새로입력한 비번
+								boolean flag = memberDAO.update(memberDTO);
+								userInfo = null;// 로그아웃							
+								view.printQuitSuccess();
+								break;
+							}
+							else {
+								// 회원탈퇴 취소
+								view.printQuitFail();
+								break;
+							}
 						}
 					}
 				}
@@ -165,7 +171,7 @@ public class Controller {
 				int productCount = view.inputProductCount();
 				ProductDTO productDTO = new ProductDTO();
 				
-				String productBrand= view.inputBrandNum();// 브랜드명입력받기
+				String productBrand= view.inputBrandName();// 브랜드명입력받기
 				
 				productDTO = new ProductDTO();
 				//상품 디티오 새로만들어서 데이터 담기
@@ -185,7 +191,7 @@ public class Controller {
 			}
 			else if(command == 6) { // 재고 추가
 				
-				int productPk = view.inputProductNum(); //view.pk입력받아오기
+				int productPk = view.getPK(); //view.pk입력받아오기
 				int productCount = view.addInventory(); //view.수량입력받아오기
 				
 				ProductDTO productDTO = new ProductDTO();
@@ -202,207 +208,185 @@ public class Controller {
 					view.printAddProductFail();
 				}
 			}
-			else if(command == 7) { 
+			else if (command == 7) {
 				// 상품 전체 출력
 				ProductDTO productDTO = new ProductDTO();
 				productDTO.setCondition("ALL_DESC"); // 기본은 상품PK내림차순
 				// datas 출력 후 이후 command 받기
 				ArrayList<ProductDTO> datas = new ArrayList<>();
 				datas = productDAO.selectAll(productDTO);
-				command = view.printAllProducts(datas); // view에서 datas 출력하기
+				view.printAllProducts(datas); // view에서 datas 출력하기
+				command = view.printProductDetailMenu();
 				
-				if(command == 12) { // 검색어로 출력
+// 수정07 검색어, 가격 내림/오름차순 / 브랜드별 출력 모두 수정
+				if (command == 12) { // 검색어로 출력
 					// 검색어 입력
 					String keyword = view.inputSearch(); // 검색어 입력 받기
-					
+
 					productDTO = new ProductDTO();
 					productDTO.setCondition("ALL_SEARCH");
 					productDTO.setKeyword(keyword); // setProductName에 검색어 넘겨주기 ////////////////
-					view.printAllProducts(productDAO.selectAll(productDTO));
-				}
-				else if(command == 13) { // 가격 내림차순으로 출력
-					productDTO = new ProductDTO(); 
+					ArrayList<ProductDTO> searchDatas = productDAO.selectAll(productDTO);
+					view.printAllProducts(searchDatas);
+				} else if (command == 13) { // 가격 내림차순으로 출력
+					productDTO = new ProductDTO();
 					productDTO.setCondition("ALL_PRICE_DESC");
-					view.printAllProducts(productDAO.selectAll(productDTO));
-				}
-				else if(command == 14) { // 가격 오름차순으로 출력
-					productDTO = new ProductDTO(); 
-					productDTO.setCondition("ALL_PRICE_ASC");
-					view.printAllProducts(productDAO.selectAll(productDTO));
-				}
-				else if(command == 15) { // 브랜드별로 출력
-					// 1. V에 현재 M에 있는 브랜드명 4개 넘겨주기
-					// 2. View를 통해 사용자 입장에서는 브랜드 번호 입력 받고 
-					// 3. 내부적으로는 View에서 ▶ 브랜드 번호를 브랜드명으로 변경하여 M에 보내기 
+					ArrayList<ProductDTO> priceDescDatas = productDAO.selectAll(productDTO);
 					
+					view.printAllProducts(priceDescDatas);
+				} else if (command == 14) { // 가격 오름차순으로 출력
+					productDTO = new ProductDTO();
+					productDTO.setCondition("ALL_PRICE_ASC");
+					ArrayList<ProductDTO> priceAscDatas = productDAO.selectAll(productDTO);
+
+					view.printAllProducts(priceAscDatas);
+				} else if (command == 15) { // 브랜드별로 출력
+					// 1. V에 현재 M에 있는 브랜드명 4개 넘겨주기
+					// 2. View를 통해 사용자 입장에서는 브랜드 번호 입력 받고
+					// 3. 내부적으로는 View에서 ▶ 브랜드 번호를 브랜드명으로 변경하여 M에 보내기
+
 					// 브랜드 이름 뽑아오기
 					view.printBrandName(); // 브랜드 리스트 출력
-					productDTO = new ProductDTO();
-					productDTO.setCondition("BRAND_UNIQUE"); 
-					
-					String brandName = view.inputBrandNum(); // 브랜드 이름 하나 받기 = 브랜드 이름 출력하기
+					String brandName = view.inputBrandName(); // 브랜드 이름 하나 받기 = 브랜드 이름 출력하기
 
 					// 브랜드 이름 넘기기
 					productDTO = new ProductDTO();
-					productDTO.setCondition("ALL_BRAND"); 
+					productDTO.setCondition("ALL_BRAND");
 					productDTO.setProductBrand(brandName); // 브랜드 이름 넘기기
-					
+
 					// 찾고자 하는 브랜드 출력하기
 					view.printAllProducts(productDAO.selectAll(productDTO));
 				}
-				// 물건 상세보기 
 				// 물건 상세보기
-				else if(command == 8) {
-					// 물건 상세 보기
-					// 어떤 상픔을 상세보기할 건지 
-					productDTO = new ProductDTO();
-					// view에서 상품 번호 1~5 입력받고 -> pk를 넘겨받기 
-					int productPk = view.inputProductNum(); //productDAO.selectAll(productDTO)
-					productDTO.setProductPK(productPk);
-					
-					// 출력할 데이터가 있는지 확인				
-					ProductDTO data = productDAO.selectOne(productDTO);
-					
-					if(data != null) { // data가 있니?
-						// 있을 경우
-						//productDTO = new ProductDTO();
-						//productDTO.setProductPK(data.getProductPK()); // 그 상품의 PK를 가져오기
-						
-						// 상세보기 출력
-						view.printProduct(data); // view에서 datas 보여달라고 요청 ✏✏😀🔻🔻🔻🔺🔺✏✏😀🔻🔻🔻🔺🔺 
+				// 물건 상세보기
+				else if (command == 8) {
+// 수정01 물건 상세보기 전체 수정
+					ProductDTO data = view.inputProductNum(datas); // productDAO.selectAll(productDTO)
+
+// 수정03 data는 무조건 받을 수 있으므로 분기 삭제
+					// 상세보기 출력
+					view.printProduct(data); // view에서 datas 보여달라고 요청 ✏✏😀🔻🔻🔻🔺🔺✏✏😀🔻🔻🔻🔺🔺
+					if(userInfo!=null && userInfo.getMemberRole().equals("ADMIN")) {
+						command = view.printDetailedAdminMenu();
+					}
+					else {						
 						command = view.printDetailedMenu();
-				        
-				     // 있을 경우 222
-						if(command == 10) { // 바로 구매하기
-							// 몇 개 구매하는지 입력받기
-							int productCnt = view.buyProductCount();
-							 
+					}
+
+					// 있을 경우 222
+					if (command == 10) { // 바로 구매하기
+						if(userInfo==null) {
+							view.printLoginFirst();
+							continue;
+						}
+						// 몇 개 구매하는지 입력받기
+						int productCnt = view.buyProductCount();
+						// 상품 재고가 부족하면
+						if(productCnt > productDAO.selectOne(data).getProductCount()) {
+							System.out.println("재고가 부족합니다");
+							System.out.println("현재 재고: "+ productDAO.selectOne(data).getProductCount());
+							continue;
+						}
+						productDTO = new ProductDTO();
+						productDTO.setCondition("BUY_PRODUCT"); // condition
+						productDTO.setProductCount(productCnt); // 입력 개수 넘기기
+						productDTO.setProductPK(data.getProductPK()); // 상품 PK 넘기기
+						// update 진행
+						boolean flag = productDAO.update(productDTO);
+
+						// 바로구매 성공/실패
+						if (flag) {
+							view.printBuySuccess();
+						} else {
+							view.printBuyFail();
+						}
+					} 
+// 수정04 상품 삭제보기에서 장바구니 구매 기능은 설계에 존재하지 않음으로 삭제					
+//					
+// 수정06 상품 관리자뷰에서 상품 삭제 기능 수행가능하게 만들기
+					// 상품 삭제
+					else if (command == 25) { // 관리자 기능
+						// View에서 상품 삭제 여부 물어보기
+						boolean flag = view.printDeleteProduct();
+
+						if (flag) { // 예라고 답했을 경우
 							productDTO = new ProductDTO();
-							productDTO.setCondition("BUY_PRODUCT"); // condition
-							productDTO.setProductCount(productCnt); // 입력 개수 넘기기
-							productDTO.setProductPK(data.getProductPK()); // 상품 PK 넘기기
-							// update 진행
-							boolean flag = productDAO.update(productDTO);
-							
-							// 바로구매 성공/실패
-							if(flag) {
-								view.printBuySuccess();
+							productDTO.setProductPK(data.getProductPK()); // 삭제하려는 상품 PK
+
+							// delete 진행
+							flag = productDAO.delete(productDTO); // true/false 반환 받기
+
+							// 상품 삭제 성공 여부
+							if (flag) {
+								view.printDeleteProductSuccess();
 							} else {
-								view.printBuyFail();
+								view.printDeleteProductFail();
 							}
+
+						} else { // 아니오 라고 답했을 경우
+							view.printDeleteProductCancel();
 						}
-						else if(command == 16) { 
-							// 장바구니에 있는 상품 구매
-							//////view.상품구매하시겠습니까물어보는메서드호출();
-							
-							// 장바구니 주인이 현재 로그인한 사람의 것인지 체크
-							productDTO = new ProductDTO();
-							productDTO.setCondition("BUY_PRODUCT");
-							productDTO.setProductPK(userInfo.getMemberPk()); // 어떤 사람의 장바구니인지
-							productDTO.setProductCount(data.getProductCount()); // 몇 개인지
-							
-							/*
-							BagDTO bagDTO = new BagDTO();
-							bagDTO.setMemberPk(userInfo.getMemberPk()); // 어떤 사람의 장바구니인지 
-							bagDTO.setProductPk(data.getProductPK()); // 어떤 상품인지
-							bagDTO.setProductCount(data.getProductCount()); // 몇 개인지
-							*/
-							
-							// update 진행 : 장바구니에서만 삭제, 실제 상품 삭제 XX
-							boolean flag = productDAO.update(productDTO); // true/false 반환 받기
-							
-							if(flag) {
-								// 구매 성공
-								view.printBuySuccess(); 
-							}
-							else {
-								// 구매 실패
-								view.printBuyFail();
-							}					
+					}
+					// 장바구니에 담기
+					else if (command == 23) {
+						if(userInfo==null) {
+							view.printLoginFirst();
+							continue;
 						}
-						else if(command == 9) { // 관리자 기능
-							// 상품 삭제
-							// View에서 상품 삭제 여부 물어보기
-							boolean flag = view.printDeleteProduct();
-							
-							if(flag) { // 예라고 답했을 경우
-								productDTO = new ProductDTO();
-								productDTO.setProductPK(data.getProductPK()); // 삭제하려는 상품 PK 
-								
-								// delete 진행
-								flag = productDAO.delete(productDTO); // true/false 반환 받기
-								
-								// 상품 삭제 성공 여부
-								if(flag) {
-									view.printAddProductSuccess();
-								} else {
-									view.printAddProductFail();
-								}	
-								
-							}
-							else { // 아니오 라고 답했을 경우
-								//////////view.상품삭제를취소하였습니다메서드호출();
-							}			
-						}
-						// 장바구니에 담기
-						else if(command == 23) {
-							int productCountToPutIn = this.view.inputProductCountToPutInBag();
-							BagDTO bag = new BagDTO();
-							bag.setMemberPk(userInfo.getMemberPk());
-							bag.setProductPk(data.getProductPK());
-							bag.setProductCount(productCountToPutIn);
-							bagDAO.insert(bag);
-						}
-					} else {
-						// 없을 경우
-						view.printDontBuyProduct(); ////////////////
-						continue;
-					}			
+						int productCountToPutIn = this.view.inputProductCountToPutInBag();
+						BagDTO bag = new BagDTO();
+						bag.setMemberPk(userInfo.getMemberPk());
+						bag.setProductPk(data.getProductPK());
+						bag.setProductCount(productCountToPutIn);
+						bagDAO.insert(bag);
+					}
+
 				}
-				
-				
-			}
-			else if(command == 11) { // 장바구니
-				if(userInfo==null) {
+
+			} 
+			else if (command == 11) { // 장바구니
+				if (userInfo == null) {
 					view.printLoginFirst();
 					continue;
 				}
 				// 장바구니에 상품 추가
-				//V에서 몇 개 구매할지 입력 받기
+				// V에서 몇 개 구매할지 입력 받기
 				ArrayList<BagDTO> datas = new ArrayList<BagDTO>();
-				
+
 				BagDTO bagDTO = new BagDTO();
-				//데이터 담아주기 멤버Pk 상품Pk 추가할개수
+				// 데이터 담아주기 멤버Pk 상품Pk 추가할개수
 				bagDTO.setMemberPk(userInfo.getMemberPk());
 				datas = bagDAO.selectAll(bagDTO);
 				view.printBag(datas);
 				
-				
-				
 				command = view.printBuy();
-				
-				
-				if(command == 22) { // 구매 안하면
+
+				if (command == 22) { // 구매 안하면
 					continue;
-				}
-				else if(command == 21) { // 구매 한다고 하면
-					for(int i=0;i<datas.size();i++) {
+				} else if (command == 21) { // 구매 한다고 하면
+					for (int i = 0; i < datas.size(); i++) {
+						ProductDTO pDTO = new ProductDTO();
+						pDTO.setProductPK(datas.get(i).getProductPk());
+						pDTO = productDAO.selectOne(pDTO);
+						if(datas.get(i).getProductCount() > productDAO.selectOne(pDTO).getProductCount()) {
+							System.out.println("재고가 부족합니다");
+							System.out.println("현재 재고: "+ productDAO.selectOne(pDTO).getProductCount());
+							continue;
+						}
 						ProductDTO data = new ProductDTO();
 						data.setCondition("BUY_PRODUCT");
-						
+						data.setProductName(datas.get(i).getProductName());
 						data.setProductCount(datas.get(i).getProductCount());
 						data.setProductPK(datas.get(i).getProductPk());
-						if(productDAO.update(data)) {
+						if (productDAO.update(data)) {
 							view.printProductBoughtSuccess(data);
-						}
-						else {
+						} else {
 							view.printProductBoughtFailed(data);
 						}
 						bagDAO.delete(datas.get(i));
 					}
 				}
 			}
-			
 		}
 	}
 }

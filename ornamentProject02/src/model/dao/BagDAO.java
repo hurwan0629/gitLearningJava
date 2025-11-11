@@ -40,19 +40,21 @@ public class BagDAO {
 		
 		// 상품 추가 
 		try {
+			// 모든 
 			PreparedStatement pstmt = conn.prepareStatement(this.SELECT_ALL_PRODUCT_IN_OWNER_BAG);
 			pstmt.setInt(1, bagDTO.getMemberPk());
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()) {
-				bagDTO.setBagPk(rs.getInt("BAG_PK"));
-				bagDTO.setMemberPk(rs.getInt("MEMBER_PK"));
-				bagDTO.setProductPrice(rs.getInt("PRODUCT_PRICE"));
-				bagDTO.setProductBrand(rs.getString("PRODUCT_BRAND"));
-				bagDTO.setProductCount(rs.getInt("BAG_PRODUCT_COUNT"));
-				bagDTO.setProductName(rs.getString("PRODUCT_NAME"));
-				bagDTO.setProductPk(rs.getInt("PRODUCT_PK"));
+				BagDTO data = new BagDTO();
+				data.setBagPk(rs.getInt("BAG_PK"));
+				data.setMemberPk(rs.getInt("MEMBER_PK"));
+				data.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+				data.setProductBrand(rs.getString("PRODUCT_BRAND"));
+				data.setProductCount(rs.getInt("BAG_PRODUCT_COUNT"));
+				data.setProductName(rs.getString("PRODUCT_NAME"));
+				data.setProductPk(rs.getInt("PRODUCT_PK"));
 				
-				datas.add(bagDTO);
+				datas.add(data);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

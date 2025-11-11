@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="./NewFile.html" method="POST">
+		<label for="count">아이디 : </label><input id="count" type="text" placeholder="아이디를 입력해주세요" required><br>
+		비밀번호 : <input type="password" required><br>
+		<label for="count">개수 : </label><input name="count" type="number" min="1" max="5" value="1"><br>
+		파일 : <input type="file"><br>
+		disabled : <input type="text" disabled> <br>
+		readonly : <input type="text" value="읽기전용" readonly> <br>
+		남<input type="radio" name="gender" value="남" checked> 여<input type="radio" name="gender" value="여"> <br>
+		주소 : <select>
+			<option>서울 특별시</option>
+			<option>강원도</option>
+			<option>충청북도</option>
+			<option>충청남도</option>
+		</select>
+		<input type="submit" value="제출">
+	</form>
+</body>
+</html>

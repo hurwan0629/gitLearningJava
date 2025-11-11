@@ -17,52 +17,47 @@ public class ProductDAO {
 	private static final String PRODUCT_ALL_UP = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT ORDER BY PRODUCT_PRICE";
 	private static final String PRODUCT_BRAND = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_COUNT, PRODUCT_PRICE, PRODUCT_BRAND FROM PRODUCT WHERE PRODUCT_BRAND = ?";
 	private static final String PRODUCT_SELECT = "SELECT PRODUCT_PK, PRODUCT_NAME, PRODUCT_PRICE, PRODUCT_COUNT, PRODUCT_BRAND FROM PRODUCT WHERE PRODUCT_pk = ?";
-	
+
 	private static final String INSERT_PRODUCT = "INSERT INTO PRODUCT VALUES(PRODUCT_SEQ.NEXTVAL,?,?,?,?)";
-	
+
 	private static final String UPDATE_ADD = "UPDATE PRODUCT SET PRODUCT_COUNT = PRODUCT_COUNT + ? WHERE PRODUCT_PK = ?";
 	private static final String UPDATE_BUY = "UPDATE PRODUCT SET PRODUCT_COUNT = PRODUCT_COUNT - ? WHERE PRODUCT_PK = ?";
-	
+
 	private static final String DELETE_PRODUCT = "DELETE FROM PRODUCT WHERE PRODUCT_PK = ?";
 
 	// 상품 전체 보기
-	public ArrayList<ProductDTO> selectAll(ProductDTO productDTO){
+	public ArrayList<ProductDTO> selectAll(ProductDTO productDTO) {
 		ArrayList<ProductDTO> datas = new ArrayList<ProductDTO>(); // 보낼 데이터의 배열
-		
+
 		// 1,2드라이버 로드 db 연결
 		Connection conn = JDBCUtil.connect();
-		
+
 		// 3 db 사용
 		PreparedStatement pstmt = null;
 		try {
-			if(productDTO.getCondition().equals("BRAND_UNIQUE")) { // 브랜드 전체 데이터
+			if (productDTO.getCondition().equals("BRAND_UNIQUE")) { // 브랜드 전체 데이터
 				pstmt = conn.prepareStatement(BRAND_ALL);
-			}
-			else if(productDTO.getCondition().equals("ALL_DESC")) { // PK 내림차순 전체 데이터
+			} else if (productDTO.getCondition().equals("ALL_DESC")) { // PK 내림차순 전체 데이터
 				pstmt = conn.prepareStatement(PRODUCT_ALL);
-			}
-			else if(productDTO.getCondition().equals("ALL_SEARCH")){ //해당 검색 포함한 상품 출력
+			} else if (productDTO.getCondition().equals("ALL_SEARCH")) { // 해당 검색 포함한 상품 출력
 				pstmt = conn.prepareStatement(PRODUCT_SEARCH);
 				pstmt.setString(1, '%' + productDTO.getKeyword() + '%'); // 키워드(검색어) 받아야함
-			}               // '%' + boardDTO.getTitle() + '%'
-			else if(productDTO.getCondition().equals("ALL_PRICE_DESC")) { //가격 내림차순
-				pstmt = conn.prepareStatement(PRODUCT_ALL_DOWN); 
-			}
-			else if(productDTO.getCondition().equals("ALL_PRICE_ASC")) {  // 가격 오름차순 
+			} // '%' + boardDTO.getTitle() + '%'
+			else if (productDTO.getCondition().equals("ALL_PRICE_DESC")) { // 가격 내림차순
+				pstmt = conn.prepareStatement(PRODUCT_ALL_DOWN);
+			} else if (productDTO.getCondition().equals("ALL_PRICE_ASC")) { // 가격 오름차순
 				pstmt = conn.prepareStatement(PRODUCT_ALL_UP);
-			}
-			else if(productDTO.getCondition().equals("ALL_BRAND")) { // 브랜드별 검색
+			} else if (productDTO.getCondition().equals("ALL_BRAND")) { // 브랜드별 검색
 				pstmt = conn.prepareStatement(PRODUCT_BRAND);
-				pstmt.setString(1,productDTO.getProductBrand());  // 브랜드 받아야함
+				pstmt.setString(1, productDTO.getProductBrand()); // 브랜드 받아야함
 			}
 			ResultSet rs = pstmt.executeQuery();
-			while(rs.next()) {
+			while (rs.next()) {
 				ProductDTO data = new ProductDTO();
-				
-				if(productDTO.getCondition().equals("BRAND_UNIQUE")) {
-					data.setProductBrand(rs.getString("PRODUCT_BRAND")); // 상품 브랜드		
-				} 
-				else {
+
+				if (productDTO.getCondition().equals("BRAND_UNIQUE")) {
+					data.setProductBrand(rs.getString("PRODUCT_BRAND")); // 상품 브랜드
+				} else {
 					data.setProductPK(rs.getInt("PRODUCT_PK")); // 상품번호(PK)
 					data.setProductName(rs.getString("PRODUCT_NAME")); // 상품 이름
 					data.setProductPrice(rs.getInt("PRODUCT_PRICE")); // 상품 가격
@@ -73,35 +68,34 @@ public class ProductDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally {
-			// 4  db 연결 해제
+		} finally {
+			// 4 db 연결 해제
 			JDBCUtil.disconnect(conn, pstmt);
 		}
 		return datas;// 데이터 반환
 	}
-	
-	
+
 	// 상품 상세보기
 	public ProductDTO selectOne(ProductDTO productDTO) {
 		ProductDTO data = null; // 찾은 데이터 없으면 null 반환
-		
+
 		// 1,2 드라이버 로드, db연결
 		Connection conn = JDBCUtil.connect();
-		
-		//3db 사용
+
+		// 3db 사용
 		PreparedStatement pstmt = null;
 		try {
-			 pstmt = conn.prepareStatement(PRODUCT_SELECT);
-			 pstmt.setInt(1, productDTO.getProductPK());
-			 ResultSet rs = pstmt.executeQuery();
-			 if(rs.next()) {
-				 data = new ProductDTO();
-				 data.setProductPK(rs.getInt("PRODUCT_PK"));
-				 data.setProductName(rs.getString("PRODUCT_NAME"));
-				 data.setProductPrice(rs.getInt("PRODUCT_PRICE"));
-				 data.setProductCount(rs.getInt("PRODUCT_COUNT"));
-				 data.setProductBrand(rs.getString("PRODUCT_BRAND"));			
-			 }
+			pstmt = conn.prepareStatement(PRODUCT_SELECT);
+			pstmt.setInt(1, productDTO.getProductPK());
+			ResultSet rs = pstmt.executeQuery();
+			if (rs.next()) {
+				data = new ProductDTO();
+				data.setProductPK(rs.getInt("PRODUCT_PK"));
+				data.setProductName(rs.getString("PRODUCT_NAME"));
+				data.setProductPrice(rs.getInt("PRODUCT_PRICE"));
+				data.setProductCount(rs.getInt("PRODUCT_COUNT"));
+				data.setProductBrand(rs.getString("PRODUCT_BRAND"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
@@ -110,24 +104,24 @@ public class ProductDAO {
 		}
 		return data;
 	}
-	
-	
+
 	// 상품 추가
 	public boolean insert(ProductDTO productDTO) {
 		// 1,2 드라이버 로드 / db 연결
 		Connection conn = JDBCUtil.connect();
-		
+
 		// 3 db 사용
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(INSERT_PRODUCT); //상품 추가 쿼리
+			System.out.println("ProductDAO.insert [로그] INSERT_PRODUCT 시작");
+			pstmt = conn.prepareStatement(INSERT_PRODUCT); // 상품 추가 쿼리
 			pstmt.setString(1, productDTO.getProductName()); // 상품이름 설정
 			pstmt.setInt(2, productDTO.getProductPrice()); // 상품 가격 설정
 			pstmt.setInt(3, productDTO.getProductCount()); // 상품재고 설정
 			pstmt.setString(4, productDTO.getProductBrand()); // 상품 브랜드 설정
 			int result = pstmt.executeUpdate();
-			if(result <= 0) { //추가 실패시
-				return false; //false 반환
+			if (result <= 0) { // 추가 실패시
+				return false; // false 반환
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -136,28 +130,27 @@ public class ProductDAO {
 		}
 		return true; // ㄱㅊ
 	}
-	
+
 	// 상품 데이터 업데이트
 	public boolean update(ProductDTO productDTO) {
-		
+
 		// 1,2 드라이버 로드 , db연결
 		Connection conn = JDBCUtil.connect();
-		
+
 		// 3 db 사용
 		PreparedStatement pstmt = null;
 		try {
-			if(productDTO.getCondition().equals("ADD_PRODUCT")) { // 재고 추가시
+			if (productDTO.getCondition().equals("ADD_PRODUCT")) { // 재고 추가시
 				pstmt = conn.prepareStatement(UPDATE_ADD); // 재고 추가 쿼리문
 				pstmt.setInt(1, productDTO.getProductCount()); // 재고 추가 수
 				pstmt.setInt(2, productDTO.getProductPK()); // 재고 추가할 상품pk
-			}
-			else if(productDTO.getCondition().equals("BUY_PRODUCT")) { // 상품 구매시
+			} else if (productDTO.getCondition().equals("BUY_PRODUCT")) { // 상품 구매시
 				pstmt = conn.prepareStatement(UPDATE_BUY); // 상품 재고 빼기 쿼리문
 				pstmt.setInt(1, productDTO.getProductCount()); // 재고 빼는 수
 				pstmt.setInt(2, productDTO.getProductPK()); // 재고 빼는 상품 pk
 			}
 			int result = pstmt.executeUpdate();
-			if(result<= 0) {
+			if (result <= 0) {
 				return false; // 실패시 false 반환
 			}
 		} catch (SQLException e) {
@@ -168,27 +161,26 @@ public class ProductDAO {
 		}
 		return true; // true 반환
 	}
-	
-	
+
 	// 상품 삭제
 	public boolean delete(ProductDTO productDTO) {
-		
+
 		// 1, 2 드라이버 로드, db연결
 		Connection conn = JDBCUtil.connect();
-		
+
 		// 3 db 사용
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(DELETE_PRODUCT); // 상품삭제 쿼리문 
+			pstmt = conn.prepareStatement(DELETE_PRODUCT); // 상품삭제 쿼리문
 			pstmt.setInt(1, productDTO.getProductPK()); // 삭제할 상품PK
-			int result = pstmt.executeUpdate(); 
-			if(result <= 0) {
+			int result = pstmt.executeUpdate();
+			if (result <= 0) {
 				return false;
 			}
-		}catch (SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
-		}finally {
+		} finally {
 			// db연결 해제
 			JDBCUtil.disconnect(conn, pstmt);
 		}

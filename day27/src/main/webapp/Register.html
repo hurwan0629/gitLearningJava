@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+<link rel="icon" type="/favicon-32x32.png" href="./images/fileIcon.png">
+<style type="text/css">
+	body{
+		display:flex;
+		flex-direction:column;
+		justify-content:center;
+		text-align:center;
+	}
+	form{
+		gap:30px;
+	}
+</style>
+</head>
+<body>
+	<h2>plz Sign in!</h2>
+	<form action="./Welcome-page.html" method="POST">
+		<label for="user-id">id : </label>
+		<input id="user-id" type="text" placeholder="plz write id here" 
+			pattern="^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{4,12}$" required>
+		
+		<br>
+		<label for="user-pw">pw : </label>
+		<input id="user-pw" type="password" placeholder="password here" 
+		pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=?])[A-Za-z\d!@#$%^&*()_+\-=?]{8,20}$" required>
+		
+		<br>
+		<input type="submit" value="제출">
+	</form>
+	<br><br><br>
+	<p>
+		<b>아이디는 영문과 숫자가 최소 1개씩 들어간 4자 이상, 12자 이하의 문자열이여야 합니다.</b><br>
+		<b>비번은 영문, 숫자, 특수문자가 최소 1개씩 들어간 8자 이상, 20자 이하의 문자열이여야 합니다.</b>
+	</p>
+</body>
+</html>
