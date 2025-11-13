@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>실습</title>
+
+<script type="text/javascript">
+
+	let randomNum = Math.floor(Math.random()*4)+1;
+	console.log("정답 : " + randomNum);
+	
+	alert("랜덤 숫자 맞추기 게임");
+	alert("1~5의 랜덤 숫자를 맞춰보세요!");
+	// 사용자의 맞추기 횟수와 게임종료 여부 저장할 변수 선언
+	let tryCount = 1;
+	let userQuitGame=false;
+	while(true){
+		
+		
+		// 숫자 입력받기
+		let tryNum = prompt("숫자를 입력해보세요!(1~5)");
+		// 로그
+		console.log("사용자가 입력한 값: [" + tryNum + "]");
+		
+		if(tryNum==null){
+			// userQuitGame을 true로 바꾸기
+			userQuitGame=true;
+			break;
+		}
+		// 문자/숫자 유효성검사
+		// 숫자형을 썼는지 확인하는 코드 (문자형인 tryNum을 숫자로 변환해서 NaN이 나오면 숫자를 입력한게 아니게 됨)
+		if(isNaN(tryNum)){
+			alert("숫자를 입력해주세요!");
+			continue;
+		}
+		// 종료조건 : 사용자가 정답을 맞추었을떄
+		if(tryNum == randomNum){
+			// userQuitGame를 false로 break하기
+			break;
+		}
+		
+		
+		// 숫자범위 유효성검사
+		if(tryNum<1 || 5<tryNum){
+			alert("올바른 범위의 숫자를 입력해주세요!");
+			continue;
+		}
+		// 사용자의 선택횟수 증가
+		tryCount++;
+		alert("실패! 다시 시도해보세요!");
+	}
+	// 유저가 게임을 끈거라면
+	if(userQuitGame){
+		alert("게임 종료... 잘가요!");
+	}
+	// 게임이 끝난거라면
+	else{
+		alert("정답!");
+		alert("당신의 찍기 능력 : " + 1/tryCount*100 + "%");	
+		document.write("시도한 횟수: " +tryCount +"번");
+	}
+	
+		
+</script>
+</head>
+<body>
+
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>실습09</title>
+</head>
+<style type="text/css">
+	#btn {
+		cursor : pointer;
+	}
+</style>
+<script type="text/javascript">
+	//window.onload = 
+	roll = function() {
+		document.querySelector("#btn").onclick = function(){
+			this.src = "./images/settIcon.webp";
+			this.alt = "세트이미지 01";
+		};	
+	}
+	addEventListener('load', roll);
+	// 이벤트 리스너 <-> 온로드 방식
+	// 
+</script>
+<body>
+
+	<img id="btn" alt="세트이미지 01" src="./images/gwenIcon.webp">
+	
+</body>
+</html>

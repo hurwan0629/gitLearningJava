@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script>
+	window.onload = function() {
+		// 폼 태그에 아이디 input칸에 데이터가 작성되어있지 않다면
+		// 제대로 입력하라는 안내경고창 띄우기
+		let lf = document.loginForm;
+		
+		// lf를 onsubmit기능을 썼을때의 행동 등록하기
+		lf.onsubmit = function(){
+			//lf.아이디의 input.value == null 이라면
+			// null값은 자동 false처리됨
+			if(!lf.mid.value){
+				alert('아이디를 입력해주세요!');
+				
+				// 포커싱 이동
+				lf.mid.focus();
+				
+				// form은 원래 true를 반환
+				return false;
+			}
+			if(!lf.mpw.value){
+				alert('비밀번호를 입력해주세요!');
+				
+				// 포커싱 이동
+				lf.mid.focus();
+				
+				// form은 원래 true를 반환
+				return false;
+			}
+		};
+	};
+	
+</script>
+
+</head>
+<body>
+	<form action="url" method="POST" name="loginForm">
+		아이디 <input type="text" name="mid"><br>
+		비밀번호 <input type="password" name="mpw"><br>
+		<input type="submit" value="로그인">
+	</form>
+</body>
+</html>

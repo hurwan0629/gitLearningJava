@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>16.연습문제</title>
+<style type="text/css">
+	ul {
+		list-style: none;
+		padding-left: 0;
+	}
+	
+	ul li {
+		position: relative;
+		padding-left: 30px;
+		margin:3px;
+		border: 2px solid black;
+	}
+	
+</style>
+
+<script type="text/javascript">
+	window.onload = function() {
+		const input = document.querySelector("#typing-place");
+		const list = document.querySelector("#type-list");
+		
+		input.addEventListener("keydown", function(){
+			if(event.key=="Enter"){
+				const text=input.value.trim();
+				if(text.length >= 3){
+					const li = document.createElement("li");
+					li.textContent = text;
+					list.appendChild(li);
+					
+					input.value="";
+				}
+				else{
+					alert("3글자 이상 입력해주세요")
+				}
+			}
+		});
+	}
+</script>
+
+</head>
+<body>
+	<input id=typing-place type="text" placeholder="3글자 이상 입력후 엔터">
+	<!-- 두글자 이상을 눌렀을대 ul의 li 추가하게 -->
+	<h2>입력 목록</h2>
+	<ul id="type-list">
+		<li>예시</li>
+	</ul>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript">
+	apple(); // 호이스팅
+	// 선언함수
+	function apple(){
+		let a=10;
+		let b=100*a;
+		console.log("b = "+b);
+	}
+	
+	// 익명함수
+	let banana = function(){
+		let c=11;
+		let d=10+c;
+		console.log("d = "+d);
+	};
+	banana();
+	// 스크립트 개발을 할때 여러 국가에서 개발이 되었기때문에 여러 방식이 존재함
+	
+	// 화살표 함수
+	// 간단하게 선언해서 빠르게 선언하기 위해 있는 기능
+	const 함수명 = (매개변수) => {
+		함수내용
+	}
+	
+	// 자바 스크립트에서 시작된 기능이고
+	// 자바에서도 사용할 수 	 기능 (람다식)
+	const doPlus01 = (arg1, arg2) =>{
+		let res = arg1 + arg2;
+		return res;
+	}
+	const doPlus02 = (a1, a2) => a1+a2;
+	
+</script>
+</head>
+<body>
+	
+</body>
+</html>

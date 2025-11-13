@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>실습01</title>
+<script type="text/javascript">
+	// 사용자한테 점수를 입력받아서
+	// 0~58 C등급
+	// 60-79 B등급
+	// 80~100 A등급
+	// 나머지는 다시입력
+
+	let score;
+	while(true){
+		// 사용자한테 점수 입력받기
+		score = prompt("점수를 입력하세요");
+		
+		// 종료조건
+		if(0<=score && score<=100){
+			break;
+		}
+		alert("0~100점 사이로 다시 입력해주세요!"); // 다시 입력하세요
+	}
+	
+	// A등급 이라면
+	let grade = 'C';
+	if(80<=score && score<=100){
+		grade = 'A';
+	}
+	// B등급 이라면
+	if(60<= score){
+		grade = 'B';
+	}
+	document.write(grade+"등급입니다");
+	
+	
+</script>
+
+</head>
+<body>
+	
+</body>
+</html>

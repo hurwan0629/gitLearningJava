@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>실습08</title>
+<style type="text/css">
+	#box {
+		background-color: lightpink;
+		width:400px;
+		height:400px;
+		cursor:pointer;
+	}
+</style>
+<script type="text/javascript">
+	function changeColor(elem){
+		if(elem.style.backgroundColor == 'lightblue'){
+			elem.style.backgroundColor="lightpink";			
+		}
+		else{
+			elem.style.backgroundColor="lightblue";
+		}
+	}
+</script>
+</head>
+<body>
+	
+	<div id="box" onclick="changeColor(this)"></div>
+	
+</body>
+</html>
