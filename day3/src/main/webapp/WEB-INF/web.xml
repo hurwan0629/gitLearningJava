@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN" "http://java.sun.com/j2ee/dtds/web-app_2_2.dtd">
 <web-app id="WebApp_ID">
-	<display-name>day30</display-name>
-	<servlet>
-		<servlet-name>TestServlet</servlet-name>
-		<display-name>TestServlet</display-name>
-		<description></description>
-		<servlet-class>test.TestServlet</servlet-class>
-	</servlet>
+	<display-name>day3</display-name>
 	<servlet>
 		<servlet-name>testServlet</servlet-name>
 		<display-name>testServlet</display-name>
@@ -15,22 +9,28 @@
 		<servlet-class>test.testServlet</servlet-class>
 	</servlet>
 	<servlet>
-		<servlet-name>testServlet01</servlet-name>
-		<display-name>testServlet01</display-name>
+		<servlet-name>CalcServlet</servlet-name>
+		<display-name>CalcServlet</display-name>
 		<description></description>
-		<servlet-class>test.testServlet01</servlet-class>
+		<servlet-class>test.CalcServlet</servlet-class>
 	</servlet>
-	<servlet-mapping>
-		<servlet-name>TestServlet</servlet-name>
-		<url-pattern>/TestServlet</url-pattern>
-	</servlet-mapping>
+	<servlet>
+		<servlet-name>asdf</servlet-name>
+		<display-name>asdf</display-name>
+		<description></description>
+		<servlet-class>test.asdf</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>testServlet</servlet-name>
 		<url-pattern>/testServlet</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
-		<servlet-name>testServlet01</servlet-name>
-		<url-pattern>/testServlet01</url-pattern>
+		<servlet-name>CalcServlet</servlet-name>
+		<url-pattern>/CalcServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>asdf</servlet-name>
+		<url-pattern>/asdf</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
