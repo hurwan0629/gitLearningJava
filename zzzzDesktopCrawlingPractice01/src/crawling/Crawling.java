@@ -15,8 +15,7 @@ public class Crawling {
 		
 		Document doc = null;
 		try {
-			doc = 
-					Jsoup.connect(chosunEconomyMoneyUrl).get();
+			doc =Jsoup.connect(chosunEconomyMoneyUrl).get();
 		} catch (IOException e) {
 			System.out.println("url 문제");
 			e.printStackTrace();

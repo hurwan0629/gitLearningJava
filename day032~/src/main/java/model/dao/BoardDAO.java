@@ -10,13 +10,22 @@ import model.common.JDBCUtil;
 import model.dto.BoardDTO;
 
 public class BoardDAO {
+	private static final String SELECT_ALL_AND_WRITER_NAME = 
+			"SELECT B.BID,B.TITLE,B.WRITER,B.CONTENT,M.NAME "
+			+ "FROM BOARD B LEFT OUTER JOIN MEMBER M ON B.WRITER=M.MID"
+			+ " ORDER BY BID DESC";
 	private static final String SELECT_ALL = "SELECT * FROM BOARD ORDER BY BID DESC";
 	private static final String SELECT_ALL_TITLE = "SELECT * FROM BOARD WHERE TITLE LIKE ? ORDER BY BID DESC";
 	private static final String SELECT_ALL_WRITER = "SELECT * FROM BOARD WHERE WRITER=? ORDER BY BID DESC";
 	private static final String SELECT_ONE = "SELECT * FROM BOARD WHERE BID=?";
+	private static final String SELECT_ONE_AND_WRITER_NAME = 
+			"SELECT B.BID,B.TITLE,B.WRITER,B.CONTENT,M.NAME "
+			+ "FROM BOARD B LEFT JOIN MEMBER M ON B.WRITER=M.MID WHERE BID=?";
 
 	private static final String INSERT = "INSERT INTO BOARD VALUES((SELECT NVL(MAX(BID),1000) FROM BOARD)+1,?,?,?)";
-	private static final String UPDATE = "UPDATE MEMBER SET TITLE=? WHERE BID=?";
+	private static final String UPDATE_TITLE = "UPDATE BOARD SET TITLE=? WHERE BID=?";
+	private static final String UPDATE_CONTENT = "UPDATE BOARD SET CONTENT=? WHERE BID=?";
+	private static final String UPDATE_DELMEM = "UPDATE REPLY SET WRITER=NULL WHERE WRITER=?";
 	private static final String DELETE = "DELETE FROM BOARD WHERE BID=?";
 
 	public ArrayList<BoardDTO> selectAll(BoardDTO boardDTO){
@@ -25,7 +34,7 @@ public class BoardDAO {
 		PreparedStatement pstmt = null;
 		try {
 			if(boardDTO.getCondition().equals("ALL")) {
-				pstmt = conn.prepareStatement(SELECT_ALL);
+				pstmt = conn.prepareStatement(SELECT_ALL_AND_WRITER_NAME);
 			}
 			else if(boardDTO.getCondition().equals("TITLE")) {
 				pstmt = conn.prepareStatement(SELECT_ALL_TITLE);
@@ -42,6 +51,7 @@ public class BoardDAO {
 				data.setTitle(rs.getString("TITLE"));
 				data.setWriter(rs.getString("WRITER"));
 				data.setContent(rs.getString("CONTENT"));
+				data.setWriterName(rs.getString("NAME"));
 				datas.add(data);
 			}
 		} catch (SQLException e) {
@@ -55,7 +65,7 @@ public class BoardDAO {
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(SELECT_ONE);
+			pstmt = conn.prepareStatement(SELECT_ONE_AND_WRITER_NAME);
 			pstmt.setInt(1, boardDTO.getBid());
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
@@ -64,6 +74,7 @@ public class BoardDAO {
 				data.setTitle(rs.getString("TITLE"));
 				data.setWriter(rs.getString("WRITER"));
 				data.setContent(rs.getString("CONTENT"));
+				data.setWriterName(rs.getString("NAME"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -95,12 +106,31 @@ public class BoardDAO {
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(UPDATE);
-			pstmt.setString(1, boardDTO.getTitle());
-			pstmt.setInt(2, boardDTO.getBid());
-			int result = pstmt.executeUpdate();
-			if(result <= 0) {
-				return false;
+			if(boardDTO.getCondition().equals("UPDATE_TITLE")) {
+				pstmt = conn.prepareStatement(UPDATE_TITLE);
+				pstmt.setString(1, boardDTO.getTitle());
+				pstmt.setInt(2, boardDTO.getBid());
+				int result = pstmt.executeUpdate();
+				if(result <= 0) {
+					return false;
+				}
+			}
+			else if(boardDTO.getCondition().equals("UPDATE_CONTENT")) {
+				pstmt = conn.prepareStatement(UPDATE_CONTENT);
+				pstmt.setString(1, boardDTO.getContent());
+				pstmt.setInt(2, boardDTO.getBid());
+				int result = pstmt.executeUpdate();
+				if(result <= 0) {
+					return false;
+				}
+			}
+			else if(boardDTO.getCondition().equals("UPDATE_DELMEM")) {
+				pstmt = conn.prepareStatement(UPDATE_DELMEM);
+				pstmt.setString(1, boardDTO.getWriter());
+				int result = pstmt.executeUpdate();
+				if(result <= 0) {
+					return false;
+				}
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

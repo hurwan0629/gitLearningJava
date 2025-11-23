@@ -24,8 +24,4 @@ else{
 	out.println("<script>alert('아직 만들어지지 않은 페이지입니다!');</script>");
 	out.println("<script>history.go(-1);</script>");
 }
-
-
-
-
 %>

@@ -7,7 +7,15 @@ public class BoardDTO {
 	private String content;
 	private String condition;
 	private String keyword;
+	private String writerName;
 	
+	
+	public String getWriterName() {
+		return writerName;
+	}
+	public void setWriterName(String writerName) {
+		this.writerName = writerName;
+	}
 	public String getKeyword() {
 		return keyword;
 	}
