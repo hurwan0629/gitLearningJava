@@ -1,4 +1,4 @@
-\# gitLearningJava
+# gitLearningJava
 
 
 
@@ -14,7 +14,7 @@
 
 
 
-\## 프로젝트 구조
+## 프로젝트 구조
 day000 <- day 몇일차 수업인지
 class00 <- 몇교시인지
 Test00 <- 교시속 몇번쨰 개념설명인지
