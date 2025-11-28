@@ -11,7 +11,8 @@ import model.dto.MemberDTO;
 
 public class MemberDAO {
 	private static final String SELECT_ONE = "SELECT * FROM MEMBER WHERE MID=? AND MPW=?";
-
+	private static final String SELECT_ONE_JOIN = "SELECT * FROM MEMBER WHERE MID=?";
+	
 	private static final String INSERT = "INSERT INTO MEMBER VALUES(?,?,?,'USER')";
 	private static final String UPDATE = "UPDATE MEMBER SET NAME=? WHERE MID=?";
 	private static final String DELETE = "DELETE FROM MEMBER WHERE MID=?";
@@ -24,9 +25,16 @@ public class MemberDAO {
 		Connection conn = JDBCUtil.connect();
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(SELECT_ONE);
-			pstmt.setString(1, memberDTO.getMid());
-			pstmt.setString(2, memberDTO.getMpw());
+			if(memberDTO.getCondition().equals("LOGIN")) {
+				pstmt = conn.prepareStatement(SELECT_ONE);
+				pstmt.setString(1, memberDTO.getMid());
+				pstmt.setString(2, memberDTO.getMpw());
+			}
+			else if(memberDTO.getCondition().equals("JOIN")) {
+				pstmt = conn.prepareStatement(SELECT_ONE_JOIN);
+				pstmt.setString(1, memberDTO.getMid());
+			}
+			
 			ResultSet rs = pstmt.executeQuery();
 			if(rs.next()) {
 				data = new MemberDTO();

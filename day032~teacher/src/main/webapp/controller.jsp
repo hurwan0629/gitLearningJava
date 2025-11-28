@@ -22,6 +22,7 @@
 	
 		// M한테 로그인요청하기
 		// == M한테 selectOne()요청하기
+		memberDTO.setCondition("LOGIN");
 		MemberDTO data = memberDAO.selectOne(memberDTO);
 	
 		// 로그인 성공하면 main.jsp로 이동

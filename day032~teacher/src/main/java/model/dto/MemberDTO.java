@@ -5,6 +5,15 @@ public class MemberDTO {
 	private String mpw;
 	private String name;
 	private String mrole;
+	private String condition;
+	
+	
+	public String getCondition() {
+		return condition;
+	}
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
 	public String getMid() {
 		return mid;
 	}
@@ -31,6 +40,8 @@ public class MemberDTO {
 	}
 	@Override
 	public String toString() {
-		return "MemberDTO [mid=" + mid + ", mpw=" + mpw + ", name=" + name + ", mrole=" + mrole + "]";
+		return "MemberDTO [mid=" + mid + ", mpw=" + mpw + ", name=" + name + ", mrole=" + mrole + ", condition="
+				+ condition + "]";
 	}
+	
 }

@@ -2,15 +2,52 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app id="WebApp_ID">
 	<display-name>zzzzMyWebPractice</display-name>
-	<listener>
-		<listener-class>controller.StartListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>controller.StartListener</listener-class>
-	</listener>
-	<listener>
-		<listener-class>controller.StartListener</listener-class>
-	</listener>
+	<!-- 
+	<filter>
+		<filter-name>EncodingFilter</filter-name>
+		<display-name>EncodingFilter</display-name>
+		<description></description>
+		<filter-class>controller.EncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>EncodingFilter</filter-name>
+		<url-pattern>/EncodingFilter</url-pattern>
+	</filter-mapping>
+	 -->
+	<servlet>
+		<servlet-name>writeServlet</servlet-name>
+		<display-name>writeServlet</display-name>
+		<description></description>
+		<servlet-class>controller.writeServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FrontController</servlet-name>
+		<display-name>FrontController</display-name>
+		<description></description>
+		<servlet-class>controller.FrontController</servlet-class>
+	</servlet>
+	<!-- 
+	<servlet>
+		<servlet-name>ImageUploadServlet</servlet-name>
+		<display-name>ImageUploadServlet</display-name>
+		<description></description>
+		<servlet-class>controller.ImageUploadServlet</servlet-class>
+	</servlet>
+	 -->
+	<servlet-mapping>
+		<servlet-name>writeServlet</servlet-name>
+		<url-pattern>/writeServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FrontController</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
+	<!-- 
+	<servlet-mapping>
+		<servlet-name>ImageUploadServlet</servlet-name>
+		<url-pattern>/ImageUploadServlet</url-pattern>
+	</servlet-mapping>
+	 -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 		<welcome-file>index.htm</welcome-file>
@@ -21,8 +58,4 @@
 		<welcome-file>default.jsp</welcome-file>
 		<welcome-file>default.xhtml</welcome-file>
 	</welcome-file-list>
-	<error-page>
-		<exception-type>java.lang.Throwable</exception-type>
-		<location>/error/error01.jsp</location>
-	</error-page>
 </web-app>

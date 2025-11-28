@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" isELIgnored="false"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +8,20 @@
 <title>메인페이지</title>
 </head>
 <body>
-	<ul>
-	<c:forEach var="data" items="${datas }" varStatus="st">
-		<li>${st.count }번쨰 요소 : ${data }</li>
-	</c:forEach>
-	</ul>
-	<a href="errorPage.jsp">에러 페이지로 가기</a>
+	<a href="writeContentPage.do">글쓰러 가기</a>
+	<table border="1">
+		<thead>
+			<tr>
+				<th>글 번호</th>
+			</tr>
+		</thead>
+		<tbody>
+		<c:forEach var="data" items="${datas}">
+			<tr>
+				<td><a href="viewContentPage.do?cpk=${data.cpk}">${data.cpk}</a></td>
+			</tr>
+		</c:forEach>
+		</tbody>
+	</table>
 </body>
 </html>

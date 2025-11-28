@@ -162,7 +162,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="day3" path="/day3" reloadable="true" source="org.eclipse.jst.j2ee.server:day3"/><Context docBase="day31" path="/day31" reloadable="true" source="org.eclipse.jst.j2ee.server:day31"/><Context docBase="day31shoppingMallPractice" path="/day31shoppingMallPractice" reloadable="true" source="org.eclipse.jst.j2ee.server:day31shoppingMallPractice"/><Context docBase="day31miniHomepagePractice" path="/day31miniHomepagePractice" reloadable="true" source="org.eclipse.jst.j2ee.server:day31miniHomepagePractice"/><Context docBase="day032~" path="/day032~" reloadable="true" source="org.eclipse.jst.j2ee.server:day032~"/><Context docBase="day032~teacher" path="/day032~teacher" reloadable="true" source="org.eclipse.jst.jee.server:day032~teacher"/><Context docBase="day034" path="/day034" reloadable="true" source="org.eclipse.jst.j2ee.server:day034"/><Context docBase="day032~Replicate" path="/day032~Replicate" reloadable="true" source="org.eclipse.jst.j2ee.server:day032~Replicate"/><Context docBase="zzzzMyWebPractice" path="/zzzzMyWebPractice" reloadable="true" source="org.eclipse.jst.j2ee.server:zzzzMyWebPractice"/></Host>
+      <Context docBase="zzzzMyWebPractice" path="/zzzzMyWebPractice" reloadable="true" source="org.eclipse.jst.j2ee.server:zzzzMyWebPractice"/></Host>
     </Engine>
   </Service>
 </Server>

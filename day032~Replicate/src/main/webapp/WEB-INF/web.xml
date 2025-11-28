@@ -2,6 +2,36 @@
 <!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app id="WebApp_ID">
 	<display-name>day032~Replicate</display-name>
+	<servlet>
+		<servlet-name>CheckServlet</servlet-name>
+		<display-name>CheckServlet</display-name>
+		<description></description>
+		<servlet-class>controller.CheckServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>MainBoardServlet</servlet-name>
+		<display-name>MainBoardServlet</display-name>
+		<description></description>
+		<servlet-class>controller.MainBoardServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>FrontController</servlet-name>
+		<display-name>FrontController</display-name>
+		<description></description>
+		<servlet-class>controller.FrontController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CheckServlet</servlet-name>
+		<url-pattern>/CheckServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>MainBoardServlet</servlet-name>
+		<url-pattern>/MainBoardServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FrontController</servlet-name>
+		<url-pattern>*.do</url-pattern>
+	</servlet-mapping>
 	<!-- 
 	<filter>
 		<filter-name>EncFilter</filter-name>
@@ -24,6 +54,7 @@
 		<welcome-file>default.jsp</welcome-file>
 		<welcome-file>default.xhtml</welcome-file>
 	</welcome-file-list>
+	
 	<error-page>
 		<error-code>404</error-code>
 		<location>/error/noBoardExistError.jsp</location>

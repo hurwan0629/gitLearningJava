@@ -1,0 +1,46 @@
+  removePlugins: [
+    // 🔹 협업 / 클라우드
+    'RealTimeCollaborativeComments',
+    'RealTimeCollaborativeTrackChanges',
+    'RealTimeCollaborativeRevisionHistory',
+    'RealTimeCollaborativeEditing',
+    'PresenceList',
+    'Comments',
+    'TrackChanges',
+    'TrackChangesData',
+    'RevisionHistory',
+    'CloudServices',
+    'CloudServicesUploadAdapter',
+
+    // 🔹 CKBox 계열
+    'CKBox',
+    'CKBoxUtils',
+    'CKBoxDocuments',
+    'CKBoxImageEdit',
+    'CKBoxImageEditEditing',
+    'CKBoxImageEditUI',
+
+    // 🔹 문서 개요/페이지네이션/교정
+    'DocumentOutline',
+    'DocumentOutlineUI',
+    'Pagination',
+    'WProofreader',
+
+    // 🔹 수식
+    'MathType',
+
+    // 🔹 라이선스 에러 나던 나머지 프리미엄 기능
+    'AIAssistant',
+    'MultiLevelList',
+    'TableOfContents',
+    'FormatPainter',
+    'Template',
+    'SlashCommand',
+    'PasteFromOfficeEnhanced',
+    'CaseChange',
+
+    // 🔹 클라우드/쉬운 이미지 업로드(유료용)
+    'EasyImage',
+    'ExportPdf',
+    'ExportWord'
+  ],
